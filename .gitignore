@@ -1,4 +1,4 @@
-logs/.
-backups/.
-install/config/.
-.dea/.
+logs/
+backups/
+install/config/
+.dea/
