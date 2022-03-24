@@ -12,3 +12,7 @@ CRUD de páginas.
 CRUD de usuários.
 CRUD de niveis de acesso.
 CRUD de permissões por nível de acesso.
+
+Credenciais:
+  User: root
+  Password: 3085A9E928BA
