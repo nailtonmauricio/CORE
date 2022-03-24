@@ -1,7 +1,7 @@
 <?php
 
 $url_host = filter_input(INPUT_SERVER, "HTTP_HOST");
-define("pg", "http://$url_host/PAS2/adm");
+define("pg", "http://$url_host/CORE/adm");
 
 const DHBR = "d/m/Y H:i:s";
 const DBR = "d/m/Y";
