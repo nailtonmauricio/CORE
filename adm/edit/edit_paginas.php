@@ -36,7 +36,7 @@ if (!empty($id)) {
                 <div class="form-group">
                     <label for="id" class="col-sm-2 control-label">ID</label>
                     <div class="col-sm-10">
-                        <input type="id" name="id" class="form-control" id="id"  value="<?php
+                        <input type="text" name="id" class="form-control" id="id"  value="<?php
                         if (isset($_SESSION['dados']['id'])) {
                             echo $_SESSION['dados']['id'];
                         } elseif (isset($row['id'])) {
