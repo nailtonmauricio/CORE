@@ -36,49 +36,25 @@ if (!empty($id)) {
                 <div class="form-group">
                     <label for="id" class="col-sm-2 control-label">ID</label>
                     <div class="col-sm-10">
-                        <input type="text" name="id" class="form-control" id="id"  value="<?php
-                        if (isset($_SESSION['dados']['id'])) {
-                            echo $_SESSION['dados']['id'];
-                        } elseif (isset($row['id'])) {
-                            echo $row ['id'];
-                        }
-                        ?>" readonly/>
+                        <input type="text" name="id" class="form-control" id="id"  value="<?= $row["id"]?>" readonly/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="nome" class="col-sm-2 control-label">Nome</label>
+                    <label for="name" class="col-sm-2 control-label">Nome</label>
                     <div class="col-sm-10">
-                        <input type="text" name="nome" class="form-control" id="nome" placeholder="Nome Completo" value="<?php
-                        if (isset($_SESSION['dados']['nome'])) {
-                            echo $_SESSION['dados']['nome'];
-                        } elseif (isset($row['name'])) {
-                            echo $row['name'];
-                        }
-                        ?>"/>
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Nome Completo" value="<?= $row["name"]?>"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="endereco" class="col-sm-2 control-label">Endereço</label>
+                    <label for="path" class="col-sm-2 control-label">Endereço</label>
                     <div class="col-sm-10">
-                        <input type="endereco" name="endereco" class="form-control" id="email" placeholder="endereco" value="<?php
-                        if (isset($_SESSION['dados']['endereco'])) {
-                            echo $_SESSION['dados']['endereco'];
-                        } elseif (isset($row['path'])) {
-                            echo $row ['path'];
-                        }
-                        ?>"/>
+                        <input type="text" name="path" class="form-control" id="path" placeholder="endereco" value="<?= $row["path"]?>"/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="descricao" class="col-sm-2 control-label">Descrição</label>
+                    <label for="description" class="col-sm-2 control-label">Descrição</label>
                     <div class="col-sm-10">
-                        <input type="text" name="descricao" class="form-control" id="descricao" placeholder="descrição da página" value="<?php
-                        if (isset($_SESSION['dados']['descricao'])) {
-                            echo $_SESSION['dados']['descricao'];
-                        } elseif (isset($row['description'])) {
-                            echo $row['description'];
-                        }
-                        ?>"/>
+                        <input type="text" name="description" class="form-control" id="description" placeholder="descrição da página" value="<?= $row["description"]?>"/>
                     </div>
                 </div>
                 <div class="form-group">
