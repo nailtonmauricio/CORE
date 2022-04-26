@@ -24,7 +24,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $row_info
     );
 
-    if($data["nome"] !== $row_info["name"]){
+    if(empty($data["nome"]?NULL:$data["nome"]) !== $row_info["name"]){
         $sql = "UPDATE pages SET name =:name, modified = CURRENT_TIMESTAMP WHERE id =:id";
         $res = $conn ->prepare($sql);
         $res ->bindValue(":name", empty($data["nome"])?NULL:$data["nome"]);
