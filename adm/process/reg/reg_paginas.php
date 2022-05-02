@@ -47,11 +47,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 chmod($data["path"], 0777);
             }
 
-            $string = "<?php";
             $file = $data["path"] . "/".$data["name"];
-            $handle = fopen($file . ".php", "w+");
-            fwrite($handle, $string);
-            fclose($handle);
+            $string = "<?php";
+            if(!file_exists($file.".php")){
+                $handle = fopen($file . ".php", "w+");
+                fwrite($handle, $string);
+                fclose($handle);
+            }
 
             $sql = "INSERT INTO pages (name, path, description) VALUES (:name, :path, :description)";
             $res = $conn->prepare($sql);
