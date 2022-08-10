@@ -47,10 +47,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 chmod($data["path"], 0777);
             }
 
-            $file = $data["path"] . "/".$data["name"];
             $string = "<?php";
-            if(!file_exists($file.".php")){
-                $handle = fopen($file . ".php", "w+");
+            $file = $data["path"] . "/".$data["name"].".php";
+
+            if(!is_file($file)){
+                $handle = fopen($file, "w+");
                 fwrite($handle, $string);
                 fclose($handle);
             }
