@@ -2,9 +2,12 @@
 
 session_start();
 
-if(in_array("config.txt", scandir(__DIR__."/config"))){
-    header("Location: ../index.php");
+if(is_dir("config")&(is_file("config.txt"))){
+    if(in_array("config.txt", scandir(__DIR__."/config"))){
+        header("Location: ../index.php");
+    }
 }
+
 $_SESSION["msg"] = "<div class='text-center alert alert-info alert-dismissible fade show' role='alert'>"
     ."<strong>Bem vindo!</strong> Antes de inciar o projeto é necessário configurar a base de dados!"
     ."<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button></div>";
