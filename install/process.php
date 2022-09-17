@@ -196,7 +196,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `first_name` varchar(220) NOT NULL,
           `last_name` varchar(220) NOT NULL,
-          `email` varchar(220) DEFAULT NULL UNIQUE ,
+          `email` varchar(220) NOT NULL UNIQUE ,
           `cell_phone` varchar(11) DEFAULT NULL,
           `user_name` varchar(20) NOT NULL UNIQUE,
           `user_password` varchar(220) NOT NULL,
@@ -210,7 +210,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
         $conn ->exec($sql_users);
         $insert_users ="INSERT INTO `users` (`id`, `name`, `email`, `cell_phone`, `user_name`, `user_password`, `password_recover`, `situation`, `access_level`, `created`, `modified`) VALUES
-        (1, 'root', 'system admin', 'suporte@nmatec.com.br', '83993348144', 'root', '$2y$10\$r2s9nIM3PUimirknEP19huOz0jWnMuWE8BBcyLiK061jtkOsNmSSe', DEFAULT, DEFAULT, 1, DEFAULT, DEFAULT)";
+        (1, 'root', 'system admin', 'dev@nmatec.com.br', DEFAULT, 'root', '$2y$10\$r2s9nIM3PUimirknEP19huOz0jWnMuWE8BBcyLiK061jtkOsNmSSe', DEFAULT, DEFAULT, 1, DEFAULT, DEFAULT)";
         $conn ->exec($insert_users);
 
         //Table posts
