@@ -8,7 +8,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION["check"] = true;
 
     if (!empty($data["user_name"])) {
-        $sql = "SELECT u.id, u.name, u.email, u.user_name, u.user_password, u.situation, u.access_level, al.position, al.privilege FROM users AS u JOIN access_level AS al ON u.access_level = al.id WHERE u.user_name =:user AND u.situation = 1";
+        $sql = "SELECT u.id, u.first_name, u.last_name, u.email, u.user_name, u.user_password, u.situation, u.access_level, al.position, al.privilege FROM users AS u JOIN access_level AS al ON u.access_level = al.id WHERE u.user_name =:user AND u.situation = 1";
         $res = $conn->prepare($sql);
         $res->bindValue(":user", $data["user_name"]);
         $res->execute();
@@ -18,7 +18,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($data["user_password"], $row["user_password"])) {
                 $_SESSION["credentials"] = [
                     "id" => $row["id"],
-                    "name" => $row["name"],
+                    "first_name" => $row["first_name"],
+                    "last_name" => $row["last_name"],
                     "email" => $row["email"],
                     "user_name" => $row["user_name"],
                     "situation" => $row["situation"],
