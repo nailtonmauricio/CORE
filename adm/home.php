@@ -17,7 +17,7 @@ if (!isset($_SESSION["check"])) {
             unset($_SESSION["msg"]);
         }
     ?>
-    <h1 class="text-center text-capitalize">Bem Vindo(a), <?php echo $_SESSION["credentials"]["name"]."!"; ?></h1>
+    <h1 class="text-center text-capitalize">Bem Vindo(a), <?php echo $_SESSION["credentials"]["first_name"]."!"; ?></h1>
 </div>
 <div class="well content col-sm-12">
     <?php
