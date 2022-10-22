@@ -2,16 +2,16 @@
 
 if (!isset($_SESSION["check"])) {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible'> "
-            . "<button type='button' class='close' data-dismiss='alert'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Whoops!&nbsp;</stron>"
-            . "Área restrita, faça login para acessar.</div>";
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Whoops!&nbsp;</stron>"
+        . "Área restrita, faça login para acessar.</div>";
     header("Location: index.php");
 }
 ?>
 <div class="well content">
     <div class="pull-right">
-        <a href="<?php echo pg . '/list/list_usuarios'; ?>"><button type="button" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-list"></span> Listar</button></a>
+        <a href="<?php echo pg . '/list/users'; ?>"><button type="button" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-list"></span> Listar</button></a>
     </div>
     <div class="page-header"></div>
     <?php
@@ -20,7 +20,7 @@ if (!isset($_SESSION["check"])) {
         unset($_SESSION["msg"]);
     }
     ?>
-    <form name="cadUsuarios" method="post" action="<?php echo pg; ?>/process/reg/reg_usuarios" class="form-horizontal" enctype="multipart/form-data">
+    <form name="cadUsuarios" method="post" action="<?php echo pg; ?>/process/reg/user" class="form-horizontal" enctype="multipart/form-data">
         <div class="form-group">
             <label for="nome" class="col-sm-2 control-label">Nome</label>
             <div class="col-sm-10">
@@ -96,20 +96,20 @@ if (!isset($_SESSION["check"])) {
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <button class="btn btn-xs btn-success pull-right">
-                    <span class="glyphicon glyphicon-floppy-saved"></span> 
+                    <span class="glyphicon glyphicon-floppy-saved"></span>
                     Cadastrar
                 </button>
             </div>
         </div>
     </form>
     <script type="text/javascript">
-    /*Função que impede o envio do formulário pela tecla enter acidental*/        
+        /*Função que impede o envio do formulário pela tecla enter acidental*/
         $(document).ready(function () {
-           $('input').keypress(function (e) {
+            $('input').keypress(function (e) {
                 var code = null;
-                code = (e.keyCode ? e.keyCode : e.which);                
+                code = (e.keyCode ? e.keyCode : e.which);
                 return (code == 13) ? false : true;
-           });
+            });
         });
     </script>
 </div>

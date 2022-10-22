@@ -2,10 +2,10 @@
 
 if (!isset($_SESSION["check"])) {
     $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible'> "
-            . "<button type='button' class='close' data-dismiss='alert'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
-            . "Área restrita, faça login para acessar.</div>";
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Aviso!&nbsp;</stron>"
+        . "Área restrita, faça login para acessar.</div>";
     header("Location: index.php");
 }
 
@@ -54,6 +54,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Aviso!&nbsp;</stron>"
         . "Página atualizada com sucesso!</div>";
-    $url_return = pg . "/list/list_paginas";
+    $url_return = pg . "/list/pages";
     header("Location: $url_return");
 }

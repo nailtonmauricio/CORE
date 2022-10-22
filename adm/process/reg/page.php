@@ -5,7 +5,7 @@ if (!isset($_SESSION['check'])) {
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Aviso!&nbsp;</stron>"
-        . "Área restrita, faça login para acessar.</div>";
+        . "Área restrita, faça 'login' para acessar.</div>";
     header("Location: index.php");
 }
 
@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             . "<span aria-hidden='true'>&times;</span>"
             . "</button><strong>Aviso!&nbsp;</stron>"
             . "Campo endenreço não pode estar vazio</div>";
-        $url_redirect = pg . "/register/reg_paginas";
+        $url_redirect = pg . "/register/page";
     } else {
         $sql_verify = "SELECT COUNT(id) AS total FROM pages WHERE path =:path";
         $res_verify = $conn->prepare($sql_verify);
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 . "<span aria-hidden='true'>&times;</span>"
                 . "</button><strong>Aviso!&nbsp;</stron>"
                 . "Campo endereço já está cadastrado na base de dados</div>";
-            $url_redirect = pg . "/register/reg_paginas";
+            $url_redirect = pg . "/register/page";
 
         } else {
             if(!is_dir($data["path"])){
@@ -94,8 +94,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     . "<button type='button' class='close' data-dismiss='alert'>"
                     . "<span aria-hidden='true'>&times;</span>"
                     . "</button><strong>Aviso!&nbsp;</stron>"
-                    . "Página cadastrada cadastrada com sucesso</div>";
-                $url_redirect = pg . "/list/list_paginas";
+                    . "Página cadastrada com sucesso</div>";
+                $url_redirect = pg . "/list/pages";
                 header("Location: $url_redirect");
             }
         }
@@ -113,7 +113,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Aviso!&nbsp;</stron>"
         . "Erro ao carregar a página!</div>";
-    $url_destino = pg . "/list/list_paginas";
+    $url_destino = pg . "/list/pages";
     header("Location: $url_destino");
 }
-

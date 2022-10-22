@@ -1,10 +1,10 @@
 <?php
 if (!isset($_SESSION["check"])) {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible'> "
-            . "<button type='button' class='close' data-dismiss='alert'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
-            . "Área restrita, faça login para acessar.</div>";
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Aviso!&nbsp;</stron>"
+        . "Área restrita, faça login para acessar.</div>";
     header("Location: index.php");
 }
 $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
@@ -16,7 +16,7 @@ if (!empty($id)) {
     $res ->execute();
     $row = $res ->fetch(PDO::FETCH_ASSOC);
     var_dump(
-            $row
+        $row
     );
     if ($res ->rowCount()) {
         //$row = mysqli_fetch_assoc($result);
@@ -24,14 +24,14 @@ if (!empty($id)) {
         <div class="well content">
             <div class="pull-right">
                 <?php
-                $button_edit = load('edit/edit_paginas', $conn);
-                $button_list = load('list/list_paginas', $conn);
-                
+                $button_edit = load('edit/page', $conn);
+                $button_list = load('list/pages', $conn);
+
                 if ($button_list) {
-                    echo "<a href= '" . pg . "/list/list_paginas'><button type='button' class='btn btn-xs btn-primary'><span class='glyphicon glyphicon-list'></span> Listar</button></a> ";
+                    echo "<a href= '" . pg . "/list/pages'><button type='button' class='btn btn-xs btn-primary'><span class='glyphicon glyphicon-list'></span> Listar</button></a> ";
                 }
                 if ($button_edit) {
-                    echo "<a href= '" . pg . "/edit/edit_paginas?id=" . $row['id'] . "'><button type='button' class='btn btn-xs btn-warning'><span class='glyphicon glyphicon-edit'></span> Editar</button></a> ";
+                    echo "<a href= '" . pg . "/edit/page?id=" . $row['id'] . "'><button type='button' class='btn btn-xs btn-warning'><span class='glyphicon glyphicon-edit'></span> Editar</button></a> ";
                 }
 
                 ?>
@@ -62,20 +62,19 @@ if (!empty($id)) {
         <?php
     } else {
         $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
-                . "<button type='button' class='close' data-dismiss='alert' area-label='Close'>"
-                . "<span aria-hidden='true'>&times;</span>"
-                . "</button><strong>Aviso!&nbsp;</stron>"
-                . "Registro de usuário não encontrado!</div>";
-        $url_destino = pg . "/list/list_paginas";
+            . "<button type='button' class='close' data-dismiss='alert'>"
+            . "<span aria-hidden='true'>&times;</span>"
+            . "</button><strong>Aviso!&nbsp;</stron>"
+            . "Registro de usuário não encontrado!</div>";
+        $url_destino = pg . "/list/pages";
         header("Location: $url_destino");
     }
 } else {
     $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
-            . "<button type='button' class='close' data-dismiss='alert' area-label='Close'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
-            . "Registro não encontrado!</div>";
-    $url_destino = pg . "/list/list_paginas";
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Aviso!&nbsp;</stron>"
+        . "Registro não encontrado!</div>";
+    $url_destino = pg . "/list/pages";
     header("Location: $url_destino");
 }
-

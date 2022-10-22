@@ -1,13 +1,13 @@
 <?php
 if (!isset($_SESSION['check'])) {
     $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible'> "
-            . "<button type='button' class='close' data-dismiss='alert'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
-            . "Área restrita, faça login para acessar.</div>";
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Aviso!&nbsp;</stron>"
+        . "Área restrita, faça login para acessar.</div>";
     header("Location: index.php");
 }
-$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 if (!empty($id)) {
     if ($_SESSION["credentials"]["access_level"] == 1) {
@@ -33,17 +33,17 @@ if (!empty($id)) {
         <div class="well content">
             <div class="pull-right">
                 <?php
-                $button_edit = load('edit/edit_niveis_acesso', $conn);
-                $button_list = load('list/list_niveis_acesso', $conn);
-                $button_delete = load('process/del/del_niveis_acesso', $conn);
+                $button_edit = load('edit/access_level', $conn);
+                $button_list = load('list/access_levels', $conn);
+                $button_delete = load('process/del/access_level', $conn);
                 if ($button_list) {
-                    echo "<a href= '" . pg . "/list/list_niveis_acesso'><button type='button' class='btn btn-xs btn-primary'><span class='glyphicon glyphicon-list'></span> Listar</button></a> ";
+                    echo "<a href= '" . pg . "/list/access_levels'><button type='button' class='btn btn-xs btn-primary'><span class='glyphicon glyphicon-list'></span> Listar</button></a> ";
                 }
                 if ($button_edit) {
-                    echo "<a href= '" . pg . "/edit/edit_niveis_acesso?id=" . $row["id"] . "'><button type='button' class='btn btn-xs btn-warning'><span class='glyphicon glyphicon-edit'></span> Editar</button></a> ";
+                    echo "<a href= '" . pg . "/edit/access_level?id=" . $row["id"] . "'><button type='button' class='btn btn-xs btn-warning'><span class='glyphicon glyphicon-edit'></span> Editar</button></a> ";
                 }
                 if ($button_delete) {
-                    echo "<a href= '" . pg . "/process/del/del_niveis_acesso?id=" . $row["id"] . "'onclick=\"return confirm('Apagar nível de acesso?');\"><button type='button' class='btn btn-xs btn-danger'><span class='glyphicon glyphicon-trash'></span> Apagar</button></a> ";
+                    echo "<a href= '" . pg . "/process/del/access_level?id=" . $row["id"] . "'onclick=\"return confirm('Apagar nível de acesso?');\"><button type='button' class='btn btn-xs btn-danger'><span class='glyphicon glyphicon-trash'></span> Apagar</button></a> ";
                 }
                 ?>
             </div>
@@ -70,20 +70,19 @@ if (!empty($id)) {
         <?php
     } else {
         $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
-                . "<button type='button' class='close' data-dismiss='alert'>"
-                . "<span aria-hidden='true'>&times;</span>"
-                . "</button><strong>Aviso!&nbsp;</stron>"
-                . "Registro não encontrado!</div>";
-        $url_destino = pg . "/list/list_niveis_acesso";
-        header("Location: $url_destino");
-    }
-} else {
-    $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert'>"
             . "<span aria-hidden='true'>&times;</span>"
             . "</button><strong>Aviso!&nbsp;</stron>"
             . "Registro não encontrado!</div>";
-    $url_destino = pg . "/list/list_niveis_acesso";
+        $url_destino = pg . "/list/access_levels";
+        header("Location: $url_destino");
+    }
+} else {
+    $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Aviso!&nbsp;</stron>"
+        . "Registro não encontrado!</div>";
+    $url_destino = pg . "/list/access_levels";
     header("Location: $url_destino");
 }
-

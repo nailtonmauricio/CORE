@@ -2,10 +2,10 @@
 
 if (!isset($_SESSION["check"])) {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible'> "
-            . "<button type='button' class='close' data-dismiss='alert'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
-            . "Área restrita, faça login para acessar.</div>";
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Aviso!&nbsp;</stron>"
+        . "Área restrita, faça login para acessar.</div>";
     header("Location: index.php");
 }
 
@@ -32,7 +32,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             . "<span aria-hidden='true'>&times;</span>"
             . "</button><strong>Whoops!&nbsp;</stron>"
             . "Nível de acessesso já cadastrado no banco de dados!</div>";
-        $url_return = pg . "/list/list_niveis_acesso";
+        $url_return = pg . "/list/access_levels";
     } else {
         if(empty($data["nome"])|strlen($data["nome"])<4){
             $error = true;
@@ -40,8 +40,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 . "<button type='button' class='close' data-dismiss='alert'>"
                 . "<span aria-hidden='true'>&times;</span>"
                 . "</button><strong>Whoops!&nbsp;</stron>"
-                . "Novo nome deve conter no mínimo 4 caracters</div>";
-            $url_return = pg . "/edit/edit_niveis_acesso?id={$data["id"]}";
+                . "Novo nome deve conter no mínimo 4 caracteres</div>";
+            $url_return = pg . "/edit/access_level?id={$data["id"]}";
         } else {
             try{
                 $sql_update = "UPDATE access_level SET name =:name, modified = CURRENT_TIMESTAMP WHERE id =:id";
@@ -56,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         . "<span aria-hidden='true'>&times;</span>"
                         . "</button><strong>Aviso!&nbsp;</stron>"
                         . "Nome do nível de acesso alterado com sucesso</div>";
-                    $url_return = pg . "/list/list_niveis_acesso";
+                    $url_return = pg . "/list/access_levels";
                     header("Location: $url_return");
                 }
             } catch (PDOException $e){
@@ -81,7 +81,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     . "<span aria-hidden='true'>&times;</span>"
                     . "</button><strong>Whoops!&nbsp;</stron>"
                     . "Algo errado ocorreu, verifique o arquivo de log.</div>";
-                $url_return = pg . "/list/list_niveis_acesso";
+                $url_return = pg . "/list/access_levels";
                 $error = true;
             }
         }
@@ -91,54 +91,3 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         header("Location: $url_return");
     }
 }
-
-/*if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-    $erro = false;
-    $dados_validos = vdados($dados);
-    if (!$dados_validos) {
-        $erro = true;
-        $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
-                . "<button type='button' class='close' data-dismiss='alert'>"
-                . "<span aria-hidden='true'>&times;</span>"
-                . "</button><strong>Aviso!&nbsp;</stron>"
-                . "Necessário preencher todos os campos.</div>";
-    } elseif ((strlen($dados_validos['nome'])) < 6) {
-        $erro = true;
-        $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
-                . "<button type='button' class='close' data-dismiss='alert'>"
-                . "<span aria-hidden='true'>&times;</span>"
-                . "</button><strong>Aviso!&nbsp;</stron>"
-                . "Digite seu nome completo!</div>";
-    }  else {
-        //Bloquear cadastros repetidos usando como parâmetro o campo USUÁRIO
-        $sql = "SELECT id FROM usuarios WHERE usuario = '" . $dados_validos['usuario'] . "' AND id <> '".$dados['id']."' LIMIT 1";
-        $result = mysqli_query($conn, $sql);
-
-         if (mysqli_num_rows($result) > 0){
-          $erro = true;
-          $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
-          . "<button type='button' class='close' data-dismiss='alert' area-label='Close'>"
-          . "<span aria-hidden='true'>&times;</span>"
-          . "</button><strong>Aviso!&nbsp;</stron>"
-          . "Usuário já cadastrado no banco de dados!</div>";
-          } 
-    }
-
-    if ($erro) {
-        $_SESSION['dados'] = $dados;
-         $url_destino = pg . "/edit/edit_usuarios?id='".$dados['id']."'";
-        header("Location: $url_destino");
-    } else {
-        echo "update habilitado";
-
-    }
-} else {
-    $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
-            . "<button type='button' class='close' data-dismiss='alert' area-label='Close'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
-            . "Erro ao carregar a página!</div>";
-    $url_destino = pg . "/list/list_usuarios";
-    header("Location: $url_destino");
-}*/

@@ -2,13 +2,13 @@
 // Verifica se a sessção foi iniciada, caso não tenha sido a linha 15 redireciona para a página de login.
 if (!isset($_SESSION["check"])) {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible'> "
-            . "<button type='button' class='close' data-dismiss='alert'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
-            . "Área restrita, faça login para acessar.</div>";
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Aviso!&nbsp;</stron>"
+        . "Área restrita, faça login para acessar.</div>";
     header("Location: index.php");
 }
-$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
+$id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 if (!empty($id)) {
     if ($_SESSION["credentials"]["access_level"] == 1) {
         $sql_nv = "SELECT * FROM access_level WHERE id=:id";
@@ -25,7 +25,7 @@ if (!empty($id)) {
         ?>
         <div class="well content">
             <div class="pull-right">
-                <a href="<?php echo pg . '/list/list_niveis_acesso'; ?>">
+                <a href="<?php echo pg . '/list/access_levels'; ?>">
                     <button type="button" class="btn btn-xs btn-primary">
                         <span class='glyphicon glyphicon-list'></span> Listar
                     </button>
@@ -40,7 +40,7 @@ if (!empty($id)) {
                 unset($_SESSION["msg"]);
             }
             ?>
-            <form name="editNvAcesso" method="post" action="<?php echo pg; ?>/process/edit/edit_niveis_acesso" class="form-horizontal" enctype="multipart/form-data">
+            <form name="editNvAcesso" method="post" action="<?php echo pg; ?>/process/edit/access_level" class="form-horizontal" enctype="multipart/form-data">
                 <input type="hidden" name="id" id="id" value="<?= $row_nv["id"]; ?>"/>
                 <div class="form-group">
                     <label for="nome" class="col-sm-2 control-label">Nome</label>
@@ -63,13 +63,13 @@ if (!empty($id)) {
                 </div>
             </form>
             <script type="text/javascript">
-            /*Função que impede o envio do formulário pela tecla enter acidental*/        
+                /*Função que impede o envio do formulário pela tecla enter acidental*/
                 $(document).ready(function () {
-                   $('input').keypress(function (e) {
+                    $('input').keypress(function (e) {
                         var code = null;
-                        code = (e.keyCode ? e.keyCode : e.which);                
+                        code = (e.keyCode ? e.keyCode : e.which);
                         return (code == 13) ? false : true;
-                   });
+                    });
                 });
             </script>
         </div>
@@ -77,21 +77,20 @@ if (!empty($id)) {
         unset($_SESSION['dados']);
     } else {
         $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
-                . "<button type='button' class='close' data-dismiss='alert' area-label='Close'>"
-                . "<span aria-hidden='true'>&times;</span>"
-                . "</button><strong>Aviso!&nbsp;</stron>"
-                . "Nem um usuário encontrado(1)!</div>";
-        $url_destino = pg . "/list/list_niveis_acesso";
+            . "<button type='button' class='close' data-dismiss='alert'>"
+            . "<span aria-hidden='true'>&times;</span>"
+            . "</button><strong>Aviso!&nbsp;</stron>"
+            . "Nem um usuário encontrado(1)!</div>";
+        $url_destino = pg . "/list/access_levels";
         header("Location: $url_destino");
     }
 } else {
     $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
-            . "<button type='button' class='close' data-dismiss='alert' area-label='Close'>"
-            . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
-            . "Nem um usuário encontrado(2)!</div>";
-    $url_destino = pg . "/list/list_niveis_acesso";
+        . "<button type='button' class='close' data-dismiss='alert'>"
+        . "<span aria-hidden='true'>&times;</span>"
+        . "</button><strong>Aviso!&nbsp;</stron>"
+        . "Nem um usuário encontrado(2)!</div>";
+    $url_destino = pg . "/list/access_levels";
     header("Location: $url_destino");
 }
-                    
 
