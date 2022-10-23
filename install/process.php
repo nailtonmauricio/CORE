@@ -86,12 +86,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 (26, DEFAULT, 'register/reg_recados', DEFAULT, DEFAULT, DEFAULT),
                 (27, 'correio', 'list/list_recados', DEFAULT, DEFAULT, DEFAULT),
                 (28, DEFAULT, 'process/reg/proc_reg_recados', DEFAULT, DEFAULT, DEFAULT),
-                (39, DEFAULT, 'process/edit/edit_events', DEFAULT, DEFAULT, DEFAULT),
+                (29, DEFAULT, 'process/edit/edit_events', DEFAULT, DEFAULT, DEFAULT),
                 (30, DEFAULT, 'process/edit/proc_edit_recados', DEFAULT, DEFAULT, DEFAULT),
                 (31, DEFAULT, 'viewer/view_recado', DEFAULT, DEFAULT, DEFAULT),
                 (32, 'synchronize', 'process/synchronize/synchronize', DEFAULT, DEFAULT, DEFAULT);");
             } catch (PDOException $e){
-                var_dump(
+                setLog(
                     $e ->getMessage()
                 );
             }
@@ -119,7 +119,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 (1, 'admin', 1, 1, 1,DEFAULT, DEFAULT),
                 (2, 'default', 2, 0, 1, DEFAULT, DEFAULT);");
             } catch (PDOException $e){
-                var_dump(
+                setLog(
                     $e ->getLine()
                 );
             }
@@ -141,7 +141,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
               `modified` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
               PRIMARY KEY (`id`),
               FOREIGN KEY (`al_id`) REFERENCES access_level (`id`),
-              FOREIGN KEY (`page_id`) REFERENCES pages (`id`) ON DELETE CASCADE
+              FOREIGN KEY (`page_id`) REFERENCES pages (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
             try {
@@ -200,7 +200,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 (52, 2, 20, 1, 0, DEFAULT, DEFAULT),
                 (53, 2, 21, 0, 0, DEFAULT, DEFAULT),
                 (54, 2, 22, 1, 0, DEFAULT, DEFAULT),
-
                 (55, 2, 23, 1, 0, DEFAULT, DEFAULT),
                 (56, 2, 24, 1, 1, DEFAULT, DEFAULT),
                 (57, 2, 25, 1, 0, DEFAULT, DEFAULT),
@@ -212,7 +211,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 (63, 2, 31, 1, 0, DEFAULT, DEFAULT),
                 (64, 2, 32, 0, 0, DEFAULT, DEFAULT);");
             } catch (PDOException $e){
-                var_dump(
+                setLog(
                     $e ->getMessage()
                 );
             }
@@ -245,7 +244,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $conn ->exec("INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `cell_phone`, `user_name`, `user_password`, `password_recover`, `situation`, `access_level`, `created`, `modified`) VALUES
                 (1, 'root', 'system admin', 'dev@nmatec.com.br', DEFAULT, 'root', '$2y$10\$r2s9nIM3PUimirknEP19huOz0jWnMuWE8BBcyLiK061jtkOsNmSSe', DEFAULT, DEFAULT, 1, DEFAULT, DEFAULT);");
             } catch (PDOException $e){
-                var_dump(
+                setLog(
                     $e ->getMessage()
                 );
             }
@@ -270,8 +269,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
               FOREIGN KEY (`recipient_id`) REFERENCES users (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
         } catch (PDOException $e){
-            var_dump(
-                $e ->getLine(),
+            setLog(
                 $e ->getMessage()
             );
         }
@@ -292,8 +290,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
               FOREIGN KEY (`user_id`) REFERENCES users (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
         } catch (PDOException $e){
-            var_dump(
-                $e ->getLine(),
+            setLog(
                 $e ->getMessage()
             );
         }
