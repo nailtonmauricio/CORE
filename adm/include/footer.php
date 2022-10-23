@@ -1,4 +1,4 @@
-</div>
+
 <script src="../assets/js/personalizado.js"></script>
 <footer>
     <!-- Copyright -->

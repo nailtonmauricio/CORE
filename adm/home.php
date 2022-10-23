@@ -48,27 +48,29 @@ if (!isset($_SESSION["check"])) {
             unset($recado);
         }
 
-        var_dump(
+        /*var_dump(
                 $_SESSION
-        );
+        );*/
     ?>
-<div class="col-sm-4">
-    <h4 class="text-center">Novidades da Versão 1.0.9</h4>
-    <ul>
-        <li>Módulo de mensagens entre usuários.</li>
-    </ul> 
+    <div class="col-sm-4">
+        <h4 class="text-center">Novidades da Versão 1.0.9</h4>
+        <ul>
+            <li>Módulo de mensagens entre usuários.</li>
+        </ul>
+    </div>
+    <div class="col-sm-4">
+        <h4 class="text-center">Novidades da Versão 1.0.8</h4>
+        <ul>
+            <li>Módulo de agenda para usuários.</li>
+        </ul>
+
+    </div>
+    <div class="col-sm-4">
+        <h4 class="text-center">Novidades da Versão 1.0.7</h4>
+        <ul>
+            <li>Logoff automático após 30 minutos de inatividade.</li>
+        </ul>
+    </div>
 </div>
-<div class="col-sm-4">
-    <h4 class="text-center">Novidades da Versão 1.0.8</h4>
-    <ul>
-        <li>Módulo de agenda para usuários.</li>
-    </ul>
-    
-</div>
-<div class="col-sm-4">
-    <h4 class="text-center">Novidades da Versão 1.0.7</h4>
-    <ul>
-        <li>Logoff automático após 30 minutos de inatividade.</li>
-    </ul> 
-</div>
-</div>
+<?php
+    include_once __DIR__."/include/footer.php";

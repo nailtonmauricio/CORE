@@ -85,8 +85,8 @@ $button_delete = load("process/del/access_level", $conn);
         </tbody>
     </table>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-    <script type="text/javascript">
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    <script>
         $(document).ready( function () {
             $('#accessLevel').DataTable({
                 "language": {

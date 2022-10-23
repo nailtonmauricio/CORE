@@ -12,15 +12,29 @@ $button_perm = load("list/permissions", $conn);
 $button_edit = load("edit/access_level", $conn);
 $button_view = load("viewer/access_level", $conn);
 $button_delete = load("process/del/access_level", $conn);
-$id = filter_input(INPUT_GET, 'acid', FILTER_SANITIZE_NUMBER_INT);
+$id = filter_input(INPUT_GET, 'acid', FILTER_VALIDATE_INT);
 ?>
 <div class="well content">
     <?php
     $button_list = load("list/access_levels", $conn);
+    try {
+        $stmt = $conn ->prepare("SELECT name FROM access_level WHERE id =:id");
+        $stmt ->bindParam(":id", $id, PDO::PARAM_INT);
+        $stmt ->execute();
+        $permission = $stmt ->fetch(PDO::FETCH_OBJ);
+
+    } catch (PDOException $e){
+        var_dump(
+                $e ->getMessage()
+        );
+    }
     if ($button_list) {
         ?>
         <div class="pull-right">
             <a href="<?php echo pg . '/list/access_levels'; ?>"><button type="button" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-list"></span> Listar</button></a>
+        </div>
+        <div class="pull-left">
+            <span class="h3 text-uppercase">PERMISSÕES - <?= $permission ->name?></span>
         </div>
         <?php
     }

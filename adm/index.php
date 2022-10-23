@@ -2,7 +2,6 @@
 session_start();
 ob_start();
 include_once("../config/config.php");
-include_once ("library/permissao.php");
 require_once ("functions/myFunctions.php");
 
 
@@ -66,13 +65,58 @@ if (!isset($_SESSION["check"])) {
         });
     </script>
 
+    <!-- Mostra o countdown
+    ====================================== -->
+    <script>
+        let tempo = new Number();
+        // Tempo em segundos
+        tempo = 1800;
+
+        function startCountdown(){
+
+            // Se o tempo não for zerado
+            if((tempo - 1) >= 0){
+
+                // Pega a parte inteira dos minutos
+                let min = parseInt(tempo/60);
+                // Calcula os segundos restantes
+                let seg = tempo%60;
+
+                // Formata o número menor que dez, ex: 08, 07, ...
+                if(min < 10){
+                    min = "0"+min;
+                    min = min.substr(0, 2);
+                }
+                if(seg <=9){
+                    seg = "0"+seg;
+                }
+
+                // Cria a variável para formatar no estilo hora/cronômetro
+                horaImprimivel = '00:' + min + ':' + seg;
+                //JQuery pra setar o valor
+                $("#clock").html(horaImprimivel);
+
+                // Define que a função será executada novamente em 1000ms = 1 segundo
+                setTimeout('startCountdown()',1000);
+
+                // diminui o tempo
+                tempo--;
+
+                // Quando o contador chegar a zero faz logoff e encerra a sessão
+            } else {
+                location.href="<?php echo pg; ?>/sair.php";
+            }
+        }
+        // Chama a função ao carregar a tela
+        startCountdown();
+    </script>
 </head>
 <body style="background-color: #fafafa;" onload="startTime()">
 <?php
 include_once("include/header.php");
 include_once ("include/menu.php");
 ?>
-<div class="col-sm-10">
+<div class="col-sm-10" style="margin-top: 5px">
 
     <?php
 
@@ -87,7 +131,7 @@ include_once ("include/menu.php");
 
     if($res->rowCount()){
         $file = $file .".php";
-        $row = $res->fetchAll(PDO::FETCH_ASSOC);
+        $row = $res->fetchAll(PDO::FETCH_OBJ);
 
         if(file_exists($file)){
             include $file;
@@ -104,8 +148,5 @@ include_once ("include/menu.php");
     }
     ?>
 </div>
-<?php
-include_once ("include/rodape.php");
-?>
 </body>
 </html>
