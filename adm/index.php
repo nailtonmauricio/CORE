@@ -92,9 +92,9 @@ if (!isset($_SESSION["check"])) {
                 }
 
                 // Cria a variável para formatar no estilo hora/cronômetro
-                horaImprimivel = '00:' + min + ':' + seg;
+                let horaImprimivel = '00:' + min + ':' + seg;
                 //JQuery pra setar o valor
-                $("#clock").html(horaImprimivel);
+                $(".clock").html(horaImprimivel);
 
                 // Define que a função será executada novamente em 1000ms = 1 segundo
                 setTimeout('startCountdown()',1000);

@@ -17,7 +17,7 @@ $row = $res ->fetchAll(PDO::FETCH_OBJ);
                 <span class="icon-bar"></span>
             </button>
             <div class="pull-left navbar-toggle">
-                <span id="clock" style="color: #ffffff">asd</span>
+                <span class="clock" style="color: #ffffff"></span>
             </div>
         </div>
         <div id="navbar" class="collapse navbar-collapse">

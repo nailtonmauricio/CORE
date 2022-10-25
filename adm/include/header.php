@@ -1,6 +1,6 @@
 <div class="header-admin hidden-xs">
     <div class="pull-left" style="margin-left: 20px; margin-top: 15px;">
-        <strong>Tempo restante <span id="clock"></span></strong>
+        <strong>Tempo restante <span class="clock"></span></strong>
     </div>
     <div class="pull-right" style="margin-right: 20px;">
         <div class="btn-group hidden-xs" style="margin-top: 10px;">

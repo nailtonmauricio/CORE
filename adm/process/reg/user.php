@@ -67,7 +67,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     . "</button><strong>Aviso!&nbsp;</stron>"
                     . "Novo usuário cadastrado com sucesso.</div>";
                 $url_return = pg . "/list/users";
-                header("Location: $url_return");
+               # header("Location: $url_return");
             }
         } catch (PDOException $e){
             echo $e ->getMessage();

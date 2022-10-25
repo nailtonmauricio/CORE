@@ -9,21 +9,18 @@ if (!isset($_SESSION["check"])) {
     header("Location: index.php");
 }
 
-$id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
+$id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
 
 if (!empty($id)) {
-    $sql = "SELECT u.first_name, u.last_name, u.email, u.cell_phone, u.user_name, u.user_password, u.situation, u.access_level, UPPER(al.name) AS nva, al.id AS nva_id FROM users AS u JOIN access_level AS al ON u.access_level = al.id  WHERE u.id =:user_id";
+    $sql = "SELECT u.first_name, u.last_name, u.email, u.cell_phone, u.user_name, u.user_password, u.access_level, UPPER(al.name) AS access_level_name FROM users AS u JOIN access_level AS al ON u.access_level = al.id  WHERE u.id =:user_id";
     $res = $conn ->prepare($sql);
     $res ->bindParam(":user_id", $id, PDO::PARAM_INT);
     $res ->execute();
     $row = $res ->fetch(PDO::FETCH_OBJ);
 
-    var_dump(
-        $row
-    );
-
     if ($res ->rowCount()) {
-        $_SESSION["user_edit"] = $row;
+        $_SESSION["user"] = $row;
+        var_dump($_SESSION["user"]);
         ?>
         <div class="well content">
             <div class="pull-right">
@@ -37,53 +34,58 @@ if (!empty($id)) {
                 }
                 ?>
             </div>
-            <form name="editUser" method="post" action="<?php echo pg; ?>/process/edit/user" class="form-horizontal">
-                <input type="hidden" name="id" id="id" value="<?= $dados["id"] ?? $id ?>"/>
+            <form name="editUser" method="post" action="<?php echo pg; ?>/process/edit/user" class="form-horizontal" autocomplete="off">
+                <input type="hidden" name="id" id="id" value="<?= $id ?>"/>
                 <div class="form-group">
-                    <label for="nome" class="col-sm-2 control-label">Nome</label>
+                    <label for="first_name" class="col-sm-2 control-label">Nome</label>
                     <div class="col-sm-10">
-                        <input type="text" name="nome" class="form-control text-uppercase" id="nome" placeholder="Nome Completo" value="<?= $_SESSION["dados"]["nome"] ?? $row ->first_name ?>"/>
+                        <input type="text" id="first_name" name="first_name" value="<?=$row ->first_name?>" class="form-control text-uppercase" placeholder="Nome Completo">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="last_name" class="col-sm-2 control-label">Sobrenome</label>
                     <div class="col-sm-10">
-                        <input type="text" name="last_name" class="form-control text-uppercase" id="last_name" placeholder="Nome Completo" value="<?= $_SESSION["dados"]["nome"] ?? $row ->last_name ?>"/>
+                        <input type="text" id="last_name" name="last_name" value="<?=$row ->last_name?>" class="form-control text-uppercase" placeholder="Nome Completo">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="email" class="col-sm-2 control-label">Email</label>
                     <div class="col-sm-10">
-                        <input type="email" name="email" class="form-control" id="email" placeholder="E-mail" value="<?= $_SESSION["dados"]["email"] ?? $row ->email ?>"/>
+                        <input type="email" inputmode="email" id="email" name="email" value="<?=$row ->email?>" class="form-control" placeholder="E-mail">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="usuario" class="col-sm-2 control-label">Usuário</label>
+                    <label for="cell_phone" class="col-sm-2 control-label">Telefone</label>
                     <div class="col-sm-10">
-                        <input type="text" name="usuario" class="form-control text-uppercase" id="usuario" placeholder="Nome de Usuário" value="<?= $_SESSION["dados"]["usuario"] ?? $row ->user_name ?>"/>
+                        <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="<?=$row ->cell_phone ?>" class="form-control" placeholder="(xx) xxxxx-xxxx" >
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="senha" class="col-sm-2 control-label">Senha</label>
+                    <label for="user_name" class="col-sm-2 control-label">Usuário</label>
                     <div class="col-sm-10">
-                        <input type="password" name="senha" class="form-control" id="senha" placeholder="Password" value="<?= $_SESSION["dados"]["senha"] ?? null ?>"/>
+                        <input type="text" id="user_name" name="user_name" value="<?=$row ->user_name ?>" class="form-control text-uppercase" placeholder="Nome de Usuário">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="nva_id" class="col-sm-2 control-label">Nível de Acesso</label>
+                    <label for="user_password" class="col-sm-2 control-label">Senha</label>
                     <div class="col-sm-10">
-                        <select name="nva_id" id="nva_id" class="form-control">
+                        <input type="password" id="user_password" name="user_password" class="form-control" placeholder="Senha">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="access_level" class="col-sm-2 control-label">Nível de Acesso</label>
+                    <div class="col-sm-10">
+                        <select id="access_level" name="access_level" class="form-control">
                             <?php
-                            echo "<option value='" . $row ->access_level . "' selected>" . $row ->nva . "</option>";
-                            $sqlNva = "SELECT id, UPPER(name) AS name FROM access_level WHERE id != :nva_id ORDER BY name";
+                            echo "<option value='" . $row ->access_level . "' selected>" . $row ->access_level_name. "</option>";
+                            $sqlNva = "SELECT id, UPPER(name) AS name FROM access_level WHERE id != :access_level_id ORDER BY name";
                             $resNva = $conn ->prepare($sqlNva);
-                            $resNva ->bindValue(":nva_id", $row ->nva_id, PDO::PARAM_INT);
+                            $resNva ->bindValue(":access_level_id", $row ->access_level_id, PDO::PARAM_INT);
                             $resNva ->execute();
                             $rowNva = $resNva ->fetchAll(PDO::FETCH_OBJ);
                             foreach($rowNva as $nva){
                                 echo "<option value= " . $nva ->id . ">" . $nva ->name . "</option>";
                             }
-
                             ?>
                         </select>
                     </div>
@@ -100,7 +102,7 @@ if (!empty($id)) {
                 /*Função que impede o envio do formulário pela tecla enter acidental*/
                 $(document).ready(function () {
                     $('input').keypress(function (e) {
-                        var code = null;
+                        let code = null;
                         code = (e.keyCode ? e.keyCode : e.which);
                         return (code == 13) ? false : true;
                     });
@@ -108,22 +110,22 @@ if (!empty($id)) {
             </script>
         </div>
         <?php
-        unset($_SESSION['dados']);
+        #unset($_SESSION["user"]);
     } else {
-        $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
+        $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert''>"
             . "<span aria-hidden='true'>&times;</span>"
             . "</button><strong>Whoops!&nbsp;</stron>"
-            . "Nem um usuário encontrado!</div>";
+            . "Nenhum usuário encontrado!</div>";
         $url_destino = pg . "/list/users";
         header("Location: $url_destino");
     }
 } else {
-    $_SESSION ['msg'] = "<div class='alert alert-danger alert-dismissible text-center'> "
+    $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Whoops!&nbsp;</stron>"
-        . "Nem um usuário encontrado!</div>";
+        . "Nenhum usuário encontrado!</div>";
     $url_destino = pg . "/list/users";
     header("Location: $url_destino");
 }
