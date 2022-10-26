@@ -5,13 +5,13 @@ if (!isset($_SESSION["check"])) {
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Whoops!&nbsp;</stron>"
-        . "Área restrita, faça login para acessar.</div>";
+        . "Área restrita, faça 'login' para acessar.</div>";
     header("Location: index.php");
 }
 ?>
 <div class="well content">
     <div class="pull-right">
-        <a href="<?php echo pg . '/list/users'; ?>"><button type="button" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-list"></span> Listar</button></a>
+        <a href="<?php echo pg . '/list/users'; ?>" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-list"></span> Listar</a>
     </div>
     <div class="page-header"></div>
     <?php
@@ -20,84 +20,66 @@ if (!isset($_SESSION["check"])) {
         unset($_SESSION["msg"]);
     }
     ?>
-    <form name="cadUsuarios" method="post" action="<?php echo pg; ?>/process/reg/user" class="form-horizontal" enctype="multipart/form-data">
+    <form name="registerUser" method="post" action="<?php echo pg; ?>/process/reg/user" class="form-horizontal" autocomplete="off">
         <div class="form-group">
-            <label for="nome" class="col-sm-2 control-label">Nome</label>
+            <label for="first_name" class="col-sm-2 control-label">Nome</label>
             <div class="col-sm-10">
-                <input type="text" name="nome" class="form-control text-uppercase" id="nome" placeholder="Nome Completo" value="<?php
-                if (isset($_SESSION['dados']['nome'])) {
-                    echo $_SESSION['dados']['nome'];
-                }
-                ?>" autofocus/>
+                <input type="text" id="first_name" name="first_name" value="" class="form-control text-uppercase">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="last_name" class="col-sm-2 control-label">Sobrenome</label>
+            <div class="col-sm-10">
+                <input type="text" id="last_name" name="last_name" value="" class="form-control text-uppercase">
             </div>
         </div>
         <div class="form-group">
             <label for="email" class="col-sm-2 control-label">Email</label>
             <div class="col-sm-10">
-                <input type="email" name="email" class="form-control text-lowercase" id="email" placeholder="E-mail" value="<?php
-                if (isset($_SESSION['dados']['email'])) {
-                    echo $_SESSION['dados']['email'];
-                }
-                ?>"/>
+                <input type="email" inputmode="email" id="email" name="email" value="" class="form-control">
             </div>
         </div>
         <div class="form-group">
-            <label for="cel" class="control-label col-sm-2">Celular</label>
+            <label for="cell_phone" class="col-sm-2 control-label">Telefone</label>
             <div class="col-sm-10">
-                <input type="text" name="cel" id="cel" class="form-control celular" placeholder="(99) 99999-9999"/>
+                <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="" class="form-control" placeholder="(xx) xxxxx-xxxx" >
             </div>
         </div>
         <div class="form-group">
-            <label for="usuario" class="col-sm-2 control-label">Usuário</label>
+            <label for="user_name" class="col-sm-2 control-label">Usuário</label>
             <div class="col-sm-10">
-                <input type="text" name="usuario" class="form-control text-uppercase" id="usuario" placeholder="Nome de Usuário" value="<?php
-                if (isset($_SESSION['dados']['usuario'])) {
-                    echo $_SESSION['dados']['usuario'];
-                }
-                ?>"/>
+                <input type="text" id="user_name" name="user_name" value="" class="form-control text-uppercase">
             </div>
         </div>
         <div class="form-group">
-            <label for="senha" class="col-sm-2 control-label">Senha</label>
+            <label for="user_password" class="col-sm-2 control-label">Senha</label>
             <div class="col-sm-10">
-                <input type="password" name="senha" class="form-control" id="senha" placeholder="Password"/>
+                <input type="password" id="user_password" name="user_password" class="form-control">
             </div>
         </div>
-        <div class="row form-group">
-            <label for="nivelAcesso" class="col-sm-2 control-label">Nível de Acesso</label>
+        <div class="form-group">
+            <label for="access_level" class="col-sm-2 control-label">Nível de Acesso</label>
             <div class="col-sm-10">
-                <div class="input-group">
-                    <select class="form-control" name="nva_id">
-                        <option value="">[Selecione]</option>
-                        <?php
-                        $sql = "SELECT id , UPPER(name) AS name FROM access_level WHERE id >=:id AND situation = 1";
-                        $res = $conn->prepare($sql);
-                        $res ->bindValue(":id", $_SESSION["credentials"]["id"], PDO::PARAM_INT);
-                        $res->execute();
-                        $row = $res->fetchAll(PDO::FETCH_ASSOC);
-                        foreach($row as $access):
-                            ?>
-                            <option value="<?=$access["id"]?>"><?=$access["name"]?></option>
-                        <?php
-                        endforeach;
+                <select id="access_level" name="access_level" class="form-control">
+                    <?php
+                    $sql = "SELECT id , UPPER(name) AS name FROM access_level WHERE id >=:id AND situation = 1";
+                    $res = $conn->prepare($sql);
+                    $res ->bindValue(":id", $_SESSION["credentials"]["id"], PDO::PARAM_INT);
+                    $res->execute();
+                    $row = $res->fetchAll(PDO::FETCH_ASSOC);
+                    foreach($row as $access):
                         ?>
-                    </select>
-                    <span class="input-group-btn">
-                        <button class="btn btn-success" type="button">
-                            <a href="<?php echo pg; ?>/register/reg_niveis_acesso" style="color: #ffffff;">
-                                <span class="glyphicon glyphicon-option-horizontal"></span>
-                            </a>
-                        </button>
-                    </span>
-                </div>
-
+                        <option value="<?=$access["id"]?>"><?=$access["name"]?></option>
+                    <?php
+                    endforeach;
+                    ?>
+                </select>
             </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <button class="btn btn-xs btn-success pull-right">
-                    <span class="glyphicon glyphicon-floppy-saved"></span>
-                    Cadastrar
+                <button class='btn btn-xs btn-success pull-right'>
+                    <span class='glyphicon glyphicon-floppy-saved'></span> Salvar
                 </button>
             </div>
         </div>

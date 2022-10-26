@@ -68,7 +68,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
             $stmt ->execute();
         } catch (PDOException $e){
-            setLog($e ->getMessage());
+            setLog("FILE: ".$e -> getFile().", LINE: ".$e ->getLine().", MESSAGE: ".$e ->getMessage());
         }
     }
     if($data ->user_name != $_SESSION["user"] ->user_name){

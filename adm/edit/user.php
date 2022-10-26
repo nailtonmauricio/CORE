@@ -20,11 +20,11 @@ if (!empty($id)) {
 
     if ($res ->rowCount()) {
         $_SESSION["user"] = $row;
-        var_dump($_SESSION["user"]);
+        #var_dump($_SESSION["user"]);
         ?>
         <div class="well content">
             <div class="pull-right">
-                <a href="<?php echo pg . '/list/users'; ?>"><button type="button" class="btn btn-xs btn-primary"><span class='glyphicon glyphicon-list'></span> Listar</button></a>
+                <a href="<?php echo pg . '/list/users'; ?>" class="btn btn-xs btn-primary"><span class='glyphicon glyphicon-list'></span> Listar</a>
             </div>
             <div class="page-header">
                 <?php
@@ -35,7 +35,7 @@ if (!empty($id)) {
                 ?>
             </div>
             <form name="editUser" method="post" action="<?php echo pg; ?>/process/edit/user" class="form-horizontal" autocomplete="off">
-                <input type="hidden" name="id" id="id" value="<?= $id ?>"/>
+                <input type="hidden" name="id" id="id" value="<?= $id ?>">
                 <div class="form-group">
                     <label for="first_name" class="col-sm-2 control-label">Nome</label>
                     <div class="col-sm-10">
@@ -98,7 +98,7 @@ if (!empty($id)) {
                     </div>
                 </div>
             </form>
-            <script type="text/javascript">
+            <script>
                 /*Função que impede o envio do formulário pela tecla enter acidental*/
                 $(document).ready(function () {
                     $('input').keypress(function (e) {

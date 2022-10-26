@@ -5,18 +5,44 @@ if (!isset($_SESSION["check"])) {
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Aviso!&nbsp;</stron>"
-        . "Área restrita, faça login para acessar.</div>";
+        . "Área restrita, faça 'login' para acessar.</div>";
     header("Location: index.php");
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $data = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+    $data =(object)filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
     $error = false;
     var_dump(
         $data
     );
 
-    $sql_name_verify = "SELECT COUNT(id) AS count FROM users WHERE user_name =:name";
+    if(!empty($data ->email)){
+        $data ->email = filter_var($data ->email, FILTER_VALIDATE_EMAIL);
+        if(!$data ->email){
+            $error =true;
+            var_dump([
+                "msg" => "Este e-mail não é válido",
+                "back" => "return to register/user.php"
+            ]);
+        } else {
+            try {
+                $stmt = $conn ->prepare("SELECT COUNT(id) AS count FROM users WHERE email =:email");
+                $stmt ->bindParam(":email", $data ->email);
+                $stmt ->execute();
+                $count = $stmt ->fetch(PDO::FETCH_OBJ);
+
+                var_dump($count);
+            } catch (PDOException $e){
+                setLog("FILE -> ".$e ->getFile()." LINE -> ".$e ->getLine()." MESSAGE -> ".$e ->getMessage());
+            }
+        }
+    } else {
+        $data ->email = null;
+    }
+
+   var_dump($data);
+
+/*    $sql_name_verify = "SELECT COUNT(id) AS count FROM users WHERE user_name =:name";
     $res_name_verify = $conn ->prepare($sql_name_verify);
     $res_name_verify ->bindValue(":name", $data["usuario"]);
     $res_name_verify ->execute();
@@ -72,5 +98,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         } catch (PDOException $e){
             echo $e ->getMessage();
         }
-    }
+    }*/
 }
