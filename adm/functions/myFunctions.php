@@ -51,8 +51,7 @@ function setLog($msg): void
 function convertDbDateTime($a): string
 {
     list($date, $time) = explode(" ", $a);
-    $db_date_time = implode("-", array_reverse(explode("/", $date)))." ".$time;
-    return $db_date_time;
+    return implode("-", array_reverse(explode("/", $date)))." ".$time;
 }
 
 /**
@@ -66,4 +65,13 @@ function paginator(string $params, string $entity, PDO $conn):array
     $stmt = $conn ->query("SELECT {$params} FROM {$entity}");
     $stmt ->execute();
     return $stmt ->fetchAll(PDO::FETCH_OBJ);
+}
+
+/**
+ * @param string $a
+ * @return string
+ */
+function sanitizeString(string $a):string
+{
+    return rtrim(trim(mb_strtolower($a)));
 }

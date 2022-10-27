@@ -15,8 +15,9 @@ if (!isset($_SESSION["check"])) {
     </div>
     <div class="page-header"></div>
     <?php
-    if (isset($_SESSION["msg"])) {
+    if (isset($_SESSION["msg"], $_SESSION["user_register"])) {
         echo $_SESSION["msg"];
+        var_dump($_SESSION["user_register"]);
         unset($_SESSION["msg"]);
     }
     ?>
@@ -84,7 +85,7 @@ if (!isset($_SESSION["check"])) {
             </div>
         </div>
     </form>
-    <script type="text/javascript">
+    <script>
         /*Função que impede o envio do formulário pela tecla enter acidental*/
         $(document).ready(function () {
             $('input').keypress(function (e) {

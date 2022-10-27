@@ -12,6 +12,7 @@ $button_perm = load("list/permissions", $conn);
 $button_edit = load("edit/access_level", $conn);
 $button_view = load("viewer/access_level", $conn);
 $button_delete = load("process/del/access_level", $conn);
+$button_position = load("process/del/access_level", $conn);
 ?>
 <div class="well content">
     <?php
@@ -19,7 +20,7 @@ $button_delete = load("process/del/access_level", $conn);
     if ($button_cad) {
         ?>
         <div class="pull-right">
-            <a href="<?php echo pg . '/register/access_level'; ?>"><button type="button" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-floppy-saved"></span> Cadastrar</button></a>
+            <a href="<?php echo pg . '/register/access_level'; ?>" class="btn btn-xs btn-success"><span class="glyphicon glyphicon-floppy-saved"></span> Cadastrar</a>
         </div>
         <?php
     }
@@ -54,27 +55,20 @@ $button_delete = load("process/del/access_level", $conn);
                 <td><?= $level ->modified?></td>
                 <td>
                     <?php
-                    if ($lin_executadas == 1) {
-                        echo "<button type='button' class='btn btn-default btn-xs hidden-xs' data-toggle='tooltip' data-placement='top' title='Alterar Ordem'>
-                                          <span class='glyphicon glyphicon-arrow-up' ></span>
-                                          </button> ";
-                    } else {
-                        echo "<a href = '" . pg . "/process/edit/edit_ordem?ordem=" . $level ->position . "'><button type='button' class='btn btn-default btn-xs hidden-xs' data-toggle='tooltip' data-placement='top' title='Alterar Ordem'>
-                                          <span class='glyphicon glyphicon-arrow-up' ></span>
-                                          </button></a> ";
+                    if ($button_position) {
+                        echo "<a href = '" . pg . "/process/edit/edit_ordem?ordem=" . $level ->position . "' class='btn btn-default btn-xs hidden-xs' data-toggle='tooltip' data-placement='top' title='Alterar Ordem'><span class='glyphicon glyphicon-arrow-up' ></span></a> ";
                     }
-                    $lin_executadas ++;
                     if ($button_perm) {
-                        echo "<a href= '" . pg . "/list/permissions?acid=" . $level ->id . "'><button type='button' class='btn btn-xs btn-primary' data-toggle='tooltip' data-placement='top' title='Listar Permissões'><span class='glyphicon  glyphicon glyphicon-check'></span></button></a> ";
+                        echo "<a href= '" . pg . "/list/permissions?acid=" . $level ->id . "' class='btn btn-xs btn-primary' data-toggle='tooltip' data-placement='top' title='Listar Permissões'><span class='glyphicon  glyphicon glyphicon-check'></span></a> ";
                     }
                     if ($button_view) {
-                        echo "<a href= '" . pg . "/viewer/access_level?id=" . $level ->id . "'><button type='button' class='btn btn-xs btn-info' data-toggle='tooltip' data-placement='top' title='Visualizar Nível de Acesso'><span class='glyphicon glyphicon-folder-open'></span></button></a> ";
+                        echo "<a href= '" . pg . "/viewer/access_level?id=" . $level ->id . "' class='btn btn-xs btn-info' data-toggle='tooltip' data-placement='top' title='Visualizar Nível de Acesso'><span class='glyphicon glyphicon-folder-open'></span></a> ";
                     }
                     if ($button_edit) {
-                        echo "<a href= '" . pg . "/edit/access_level?id=" . $level ->id . "'><button type='button' class='btn btn-xs btn-warning hidden-xs' data-toggle='tooltip' data-placement='top' title='Editar Nível de Acesso'><span class='glyphicon glyphicon-edit'></span></button></a> ";
+                        echo "<a href= '" . pg . "/edit/access_level?id=" . $level ->id . "' class='btn btn-xs btn-warning hidden-xs' data-toggle='tooltip' data-placement='top' title='Editar Nível de Acesso'><span class='glyphicon glyphicon-edit'></span></a> ";
                     }
                     if ($button_delete) {
-                        echo "<a href= '" . pg . "/process/del/access_level?id=" . $level ->id . "'onclick=\"return confirm('Apagar nível de acesso?');\"><button type='button' class='btn btn-xs btn-danger hidden-xs' data-toggle='tooltip' data-placement='top' title='Remover Nível de Acesso'><span class='glyphicon glyphicon-remove'></span></button></a> ";
+                        echo "<a href= '" . pg . "/process/del/access_level?id=" . $level ->id . "'onclick=\"return confirm('Apagar nível de acesso?');\" class='btn btn-xs btn-danger hidden-xs' data-toggle='tooltip' data-placement='top' title='Remover Nível de Acesso'><span class='glyphicon glyphicon-remove'></span></a> ";
                     }
                     ?>
                 </td>
