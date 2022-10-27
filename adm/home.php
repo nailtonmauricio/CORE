@@ -16,6 +16,8 @@ if (!isset($_SESSION["check"])) {
             echo $_SESSION["msg"];
             unset($_SESSION["msg"]);
         }
+
+        var_dump($_SESSION);
     ?>
     <h1 class="text-center text-capitalize">Bem Vindo(a), <?php echo $_SESSION["credentials"]["first_name"]."!"; ?></h1>
 </div>

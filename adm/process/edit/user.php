@@ -11,74 +11,90 @@ if (!isset($_SESSION["check"])) {
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $data = (object)filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+    $error = false;
+    var_dump($data);
 
-    var_dump(
-        $data,
-        $_SESSION["user"]
-    );
-
-    /*
-     * Validar os dados vindos do POST
-     * Comparar os dados validados com os valores da sessão de usuário
-     */
-
-    /*
-     * VALIDANDO DADOS DO POST
-     */
-
-
-    /*
-     * COMPARANDO OS DADOS PARA REALIZAR O UPDATE
-     */
-
-    if($data ->first_name != $_SESSION["user"] ->first_name){
-        try {
-            $stmt = $conn ->prepare("UPDATE users SET first_name =:first_name WHERE id =:id");
-            $stmt ->bindValue(":first_name", $data ->first_name);
-            $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
-            $stmt ->execute();
-        } catch (PDOException $e){
-            setLog($e ->getMessage());
+    if($data ->first_name != $_SESSION["user_edit"] ->first_name){
+        if(empty($data ->first_name)||mb_strlen($data ->first_name)<3){
+            $error = true;
+            $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
+                . "<button type='button' class='close' data-dismiss='alert'>"
+                . "<span aria-hidden='true'>&times;</span>"
+                . "</button><strong>Aviso!&nbsp;</strong>"
+                . "Nome deve ser preenchido e não deve ter menos que 4 caracteres</div>";
+        } else {
+            try {
+                $stmt = $conn ->prepare("UPDATE users SET first_name =:first_name WHERE id =:id");
+                $stmt ->bindValue(":first_name", $data ->first_name);
+                $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
+                $stmt ->execute();
+            } catch (PDOException $e){
+                $error = true;
+                setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
+            }
         }
     }
-    if($data ->last_name != $_SESSION["user"] ->last_name){
-        try {
-            $stmt = $conn ->prepare("UPDATE users SET last_name =:last_name WHERE id =:id");
-            $stmt ->bindValue(":last_name", $data ->last_name);
-            $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
-            $stmt ->execute();
-        } catch (PDOException $e){
-            setLog($e ->getMessage());
+
+    if($data ->last_name != $_SESSION["user_edit"] ->last_name){
+        if(empty($data ->last_name)||mb_strlen($data ->last_name)<3) {
+            $error = true;
+            $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
+                . "<button type='button' class='close' data-dismiss='alert'>"
+                . "<span aria-hidden='true'>&times;</span>"
+                . "</button><strong>Aviso!&nbsp;</strong>"
+                . "Sobrenome deve ser preenchido e não deve ter menos que 4 caracteres</div>";
+        } else {
+            try {
+                $stmt = $conn ->prepare("UPDATE users SET last_name =:last_name WHERE id =:id");
+                $stmt ->bindValue(":last_name", $data ->last_name);
+                $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
+                $stmt ->execute();
+            } catch (PDOException $e){
+                setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
+            }
         }
     }
-    if($data ->email != $_SESSION["user"] ->email){
+
+    if($data ->email != $_SESSION["user_edit"] ->email){
+
         try {
             $stmt = $conn ->prepare("UPDATE users SET email =:email WHERE id =:id");
             $stmt ->bindValue(":email", $data ->email);
             $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
             $stmt ->execute();
         } catch (PDOException $e){
-            setLog($e ->getMessage());
+            $error = true;
+            setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
     }
-    if($data ->cell_phone != $_SESSION["user"] ->cell_phone){
+
+    if($data ->cell_phone != $_SESSION["user_edit"] ->cell_phone){
+        if(!empty($data ->cell_phone)){
+            $data ->cell_phone = preg_replace("/\D/", "", $data ->cell_phone);
+            if(empty($data ->cell_phone)){
+                $data ->cell_phone = null;
+            }
+        }
+
         try {
             $stmt = $conn ->prepare("UPDATE users SET cell_phone =:cell_phone WHERE id =:id");
             $stmt ->bindValue(":cell_phone", $data ->cell_phone);
             $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
             $stmt ->execute();
+            $stmt ->debugDumpParams();
         } catch (PDOException $e){
-            setLog("FILE: ".$e -> getFile().", LINE: ".$e ->getLine().", MESSAGE: ".$e ->getMessage());
+            setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
     }
-    if($data ->user_name != $_SESSION["user"] ->user_name){
+
+    if($data ->user_name != $_SESSION["user_edit"] ->user_name){
         try {
             $stmt = $conn ->prepare("UPDATE users SET user_name =:user_name WHERE id =:id");
             $stmt ->bindValue(":user_name", $data ->user_name);
             $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
             $stmt ->execute();
         } catch (PDOException $e){
-            setLog($e ->getMessage());
+            setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
     }
     /*if($data ->user_password != $_SESSION["user"] ->user_password){
@@ -88,26 +104,62 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
             $stmt ->execute();
         } catch (PDOException $e){
-            setLog($e ->getMessage());
+            setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
     }*/
-    if($data ->access_level != $_SESSION["user"] ->access_level){
+
+    if($data ->access_level != $_SESSION["user_edit"] ->access_level){
         try {
             $stmt = $conn ->prepare("UPDATE users SET access_level =:access_level WHERE id =:id");
             $stmt ->bindValue(":access_level", $data ->access_level);
             $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
             $stmt ->execute();
         } catch (PDOException $e){
-            setLog($e ->getMessage());
+            setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
     }
+
+    if($error){
+        $back = pg . "/register/user";
+        header("Location: $back");
+    } else {
+        unset($_SESSION["user_edit"]);
+    }
+}
+elseif($_SERVER["REQUEST_METHOD"] == "GET"){
+    $id = filter_input(INPUT_GET, "id",FILTER_VALIDATE_INT);
+    var_dump($id);
+    $stmt = $conn ->prepare("SELECT situation FROM users WHERE id =:id");
+    $stmt ->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt ->execute();
+    $res = $stmt ->fetch(PDO::FETCH_OBJ);
+
+    if($res ->situation == 1){
+        $stmt = $conn ->prepare("UPDATE users SET situation = 0 WHERE id =:id");
+    } else {
+        $stmt = $conn ->prepare("UPDATE users SET situation = 1 WHERE id =:id");
+    }
+    $stmt ->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt ->execute();
+
+    if($stmt ->rowCount()){
+        $_SESSION ["msg"] = "<div class='alert alert-success alert-dismissible text-center'> "
+            . "<button type='button' class='close' data-dismiss='alert'>"
+            . "<span aria-hidden='true'>&times;</span>"
+            . "</button><strong>Aviso!&nbsp;</strong>"
+            . "Usuário alterado com sucesso</div>";
+        $back = pg . "/list/users";
+        unset($_SESSION["user_register"]);
+        header("Location: $back");
+    }
+
 } else {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Whoops!&nbsp;</stron>"
-        . "Erro ao carregar a página!</div>";
-    $back = pg . "/list/users";
+        . "Whoops! Método de acesso proibido!</div>";
+    $back = pg . "/edit/user";
     header("Location: $back");
 }
 

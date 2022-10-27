@@ -15,9 +15,8 @@ if (!isset($_SESSION["check"])) {
     </div>
     <div class="page-header"></div>
     <?php
-    if (isset($_SESSION["msg"], $_SESSION["user_register"])) {
+    if (isset($_SESSION["msg"])) {
         echo $_SESSION["msg"];
-        var_dump($_SESSION["user_register"]);
         unset($_SESSION["msg"]);
     }
     ?>
@@ -25,37 +24,37 @@ if (!isset($_SESSION["check"])) {
         <div class="form-group">
             <label for="first_name" class="col-sm-2 control-label">Nome</label>
             <div class="col-sm-10">
-                <input type="text" id="first_name" name="first_name" value="" class="form-control text-uppercase">
+                <input type="text" id="first_name" name="first_name" value="<?=$_SESSION["user_register"] ->first_name??null?>" class="form-control text-uppercase" required>
             </div>
         </div>
         <div class="form-group">
             <label for="last_name" class="col-sm-2 control-label">Sobrenome</label>
             <div class="col-sm-10">
-                <input type="text" id="last_name" name="last_name" value="" class="form-control text-uppercase">
+                <input type="text" id="last_name" name="last_name" value="<?=$_SESSION["user_register"] ->last_name??null?>" class="form-control text-uppercase" required>
             </div>
         </div>
         <div class="form-group">
             <label for="email" class="col-sm-2 control-label">Email</label>
             <div class="col-sm-10">
-                <input type="email" inputmode="email" id="email" name="email" value="" class="form-control">
+                <input type="email" inputmode="email" id="email" name="email" value="<?=$_SESSION["user_register"] ->email??null?>" class="form-control" required>
             </div>
         </div>
         <div class="form-group">
             <label for="cell_phone" class="col-sm-2 control-label">Telefone</label>
             <div class="col-sm-10">
-                <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="" class="form-control" placeholder="(xx) xxxxx-xxxx" >
+                <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="<?=$_SESSION["user_register"] ->cell_phone??null?>" class="form-control cell-phone" placeholder="(xx) xxxxx-xxxx" >
             </div>
         </div>
         <div class="form-group">
             <label for="user_name" class="col-sm-2 control-label">Usuário</label>
             <div class="col-sm-10">
-                <input type="text" id="user_name" name="user_name" value="" class="form-control text-uppercase">
+                <input type="text" id="user_name" name="user_name" value="<?=$_SESSION["user_register"] ->user_name??null?>" class="form-control text-uppercase" required>
             </div>
         </div>
         <div class="form-group">
             <label for="user_password" class="col-sm-2 control-label">Senha</label>
             <div class="col-sm-10">
-                <input type="password" id="user_password" name="user_password" class="form-control">
+                <input type="password" id="user_password" name="user_password" class="form-control" required>
             </div>
         </div>
         <div class="form-group">
@@ -63,14 +62,14 @@ if (!isset($_SESSION["check"])) {
             <div class="col-sm-10">
                 <select id="access_level" name="access_level" class="form-control">
                     <?php
-                    $sql = "SELECT id , UPPER(name) AS name FROM access_level WHERE id >=:id AND situation = 1";
-                    $res = $conn->prepare($sql);
-                    $res ->bindValue(":id", $_SESSION["credentials"]["id"], PDO::PARAM_INT);
-                    $res->execute();
-                    $row = $res->fetchAll(PDO::FETCH_ASSOC);
-                    foreach($row as $access):
+
+                    $stmt = $conn->prepare("SELECT id , UPPER(name) AS name FROM access_level WHERE id >=:id AND situation = 1");
+                    $stmt ->bindValue(":id", $_SESSION["credentials"]["id"], PDO::PARAM_INT);
+                    $stmt->execute();
+                    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach($res as $accessLevel):
                         ?>
-                        <option value="<?=$access["id"]?>"><?=$access["name"]?></option>
+                        <option value="<?=$accessLevel["id"]?>"><?=$accessLevel["name"]?></option>
                     <?php
                     endforeach;
                     ?>
@@ -85,6 +84,11 @@ if (!isset($_SESSION["check"])) {
             </div>
         </div>
     </form>
+    <?php
+    if(isset($_SESSION["user_register"])){
+        unset($_SESSION["user_register"]);
+    }
+    ?>
     <script>
         /*Função que impede o envio do formulário pela tecla enter acidental*/
         $(document).ready(function () {

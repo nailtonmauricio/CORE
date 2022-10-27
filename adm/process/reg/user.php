@@ -12,9 +12,6 @@ if (!isset($_SESSION["check"])) {
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $data =(object)filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
     $error = false;
-    var_dump(
-        $data
-    );
 
     if(empty($data ->first_name)||mb_strlen($data ->first_name)<3){
         $error =true;
@@ -40,6 +37,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if(!empty($data ->email)){
         $data ->email = filter_var($data ->email, FILTER_VALIDATE_EMAIL);
+        $data ->email = sanitizeString($data ->email);
         if(!$data ->email){
             $error =true;
             $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
@@ -52,10 +50,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt = $conn ->prepare("SELECT COUNT(id) AS count FROM users WHERE email =:email");
                 $stmt ->bindParam(":email", $data ->email);
                 $stmt ->execute();
-                $stmt ->debugDumpParams();
                 $res = $stmt ->fetch(PDO::FETCH_OBJ);
 
-                var_dump($res ->count);
                 if($res ->count == 1){
                     $error = true;
                     $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
@@ -82,18 +78,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     } else {
         $data ->user_name = sanitizeString($data ->user_name);
         try {
-            $stmt = $conn ->query("SELECT COUNT(id) AS count FROM users WHERE user_name =:user_name");
+            $stmt = $conn ->prepare("SELECT COUNT(id) AS count FROM users WHERE user_name =:user_name");
             $stmt ->bindParam(":user_name", $data ->user_name);
             $stmt ->execute();
+            $stmt ->debugDumpParams();
             $res = $stmt ->fetch(PDO::FETCH_OBJ);
-
+            var_dump($res);
             if($res ->count == 1){
                 $error = true;
                 $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
                     . "<button type='button' class='close' data-dismiss='alert'>"
                     . "<span aria-hidden='true'>&times;</span>"
                     . "</button><strong>Aviso!&nbsp;</strong>"
-                    . "Nome de usuário deve ser preenchido e não deve ter menos que 4 caracteres</div>";
+                    . "Nome de usuário já cadastrado na base de dados</div>";
             }
         } catch (PDOException $e){
             setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
@@ -113,6 +110,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if(!empty($data ->cell_phone)){
         $data ->cell_phone = preg_replace("/\D/", "", $data ->cell_phone);
+    } else {
+        $data ->cell_phone = null;
     }
 
     if($error){
@@ -139,6 +138,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     . "Novo usuário cadastrado com sucesso.</div>";
                 $back = pg . "/list/users";
                 header("Location: $back");
+
                 if(isset($_SESSION["user_register"])){
                     unset($_SESSION["user_register"]);
                 }
@@ -148,7 +148,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
     }
-   var_dump($data);
+
 } else {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
         . "<button type='button' class='close' data-dismiss='alert'>"

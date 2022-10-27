@@ -18,8 +18,11 @@ if (!empty($id)) {
     $res ->execute();
     $row = $res ->fetch(PDO::FETCH_OBJ);
 
+    //$row ->cell_phone = preg_replace("/^(\d{2})(\d{5})(\d{4})$/", "($1) $2-$3", $row ->cell_phone);
+    var_dump($row);
+
     if ($res ->rowCount()) {
-        $_SESSION["user"] = $row;
+        $_SESSION["user_edit"] = $row;
         #var_dump($_SESSION["user"]);
         ?>
         <div class="well content">
@@ -57,7 +60,7 @@ if (!empty($id)) {
                 <div class="form-group">
                     <label for="cell_phone" class="col-sm-2 control-label">Telefone</label>
                     <div class="col-sm-10">
-                        <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="<?=$row ->cell_phone ?>" class="form-control" placeholder="(xx) xxxxx-xxxx" >
+                        <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="<?=$row ->cell_phone = preg_replace("/^(\d{2})(\d{5})(\d{4})$/", "($1) $2-$3", $row ->cell_phone)?>" class="form-control cell-phone" placeholder="(xx) xxxxx-xxxx" >
                     </div>
                 </div>
                 <div class="form-group">
@@ -78,13 +81,12 @@ if (!empty($id)) {
                         <select id="access_level" name="access_level" class="form-control">
                             <?php
                             echo "<option value='" . $row ->access_level . "' selected>" . $row ->access_level_name. "</option>";
-                            $sqlNva = "SELECT id, UPPER(name) AS name FROM access_level WHERE id != :access_level_id ORDER BY name";
-                            $resNva = $conn ->prepare($sqlNva);
-                            $resNva ->bindValue(":access_level_id", $row ->access_level_id, PDO::PARAM_INT);
-                            $resNva ->execute();
-                            $rowNva = $resNva ->fetchAll(PDO::FETCH_OBJ);
-                            foreach($rowNva as $nva){
-                                echo "<option value= " . $nva ->id . ">" . $nva ->name . "</option>";
+                            $stmt = $conn ->prepare("SELECT id, UPPER(name) AS name FROM access_level WHERE id != :access_level ORDER BY name");
+                            $stmt ->bindValue(":access_level", $row ->access_level, PDO::PARAM_INT);
+                            $stmt ->execute();
+                            $res = $stmt ->fetchAll(PDO::FETCH_OBJ);
+                            foreach($res as $accessLevel){
+                                echo "<option value= " . $accessLevel ->id . ">" . $accessLevel ->name . "</option>";
                             }
                             ?>
                         </select>

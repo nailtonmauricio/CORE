@@ -38,7 +38,7 @@ jQuery(function ($) {
     $(".dt_geral").mask("99/99/9999");
     $(".dth_geral").mask("99/99/99 99:99");
     $(".cpf").mask("999.999.999-99");
-    $(".celular").mask("(99) 99999-9999");
+    $(".cell-phone").mask("(99) 99999-9999");
     $(".fixo").mask("(99) 9999-9999");
     $(".moeda").mask("###.##0,00", {reverse: true});
     $("#h_encaixe").mask("99:99");

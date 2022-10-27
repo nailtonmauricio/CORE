@@ -48,6 +48,10 @@ if (!isset($_SESSION["check"])) {
     <script src="<?=pg?>/assets/js/bootstrap-datepicker.pt-BR.min.js"></script>
     <script src="<?=pg?>/assets/js/bootstrap-datetimepicker.pt-BR.js"></script>
 
+    <!-- JS personalizado
+    ====================================== -->
+    <script src="<?=pg?>/assets/js/personalizado.js"></script>
+
     <!--Plotagem dos gráficos -->
     <script src="https://www.gstatic.com/charts/loader.js"></script>
 
