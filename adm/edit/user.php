@@ -109,7 +109,6 @@ if (!empty($id)) {
             </script>
         </div>
         <?php
-        #unset($_SESSION["user"]);
     } else {
         $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert''>"

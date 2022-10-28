@@ -61,10 +61,11 @@ if (!isset($_SESSION["check"])) {
             <label for="access_level" class="col-sm-2 control-label">Nível de Acesso</label>
             <div class="col-sm-10">
                 <select id="access_level" name="access_level" class="form-control">
+                    <option>...</option>
                     <?php
 
-                    $stmt = $conn->prepare("SELECT id , UPPER(name) AS name FROM access_level WHERE id >=:id AND situation = 1");
-                    $stmt ->bindValue(":id", $_SESSION["credentials"]["id"], PDO::PARAM_INT);
+                    $stmt = $conn->prepare("SELECT id , UPPER(name) AS name FROM access_level WHERE position >=:position AND situation = 1");
+                    $stmt ->bindValue(":position", $_SESSION["credentials"]["position"], PDO::PARAM_INT);
                     $stmt->execute();
                     $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     foreach($res as $accessLevel):

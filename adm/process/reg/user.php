@@ -13,6 +13,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $data =(object)filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
     $error = false;
 
+    $data ->first_name = sanitizeString($data ->first_name);
     if(empty($data ->first_name)||mb_strlen($data ->first_name)<3){
         $error =true;
         $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
@@ -20,10 +21,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             . "<span aria-hidden='true'>&times;</span>"
             . "</button><strong>Whoops!&nbsp;</strong>"
             . "Nome deve ser preenchido e não deve ter menos que 4 caracteres</div>";
-    } else {
-        $data ->first_name = sanitizeString($data ->first_name);
     }
 
+    $data ->last_name = sanitizeString($data ->last_name);
     if(empty($data ->last_name)||mb_strlen($data ->last_name)<3){
         $error =true;
         $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
@@ -31,8 +31,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             . "<span aria-hidden='true'>&times;</span>"
             . "</button><strong>Whoops!&nbsp;</strong>"
             . "Sobrenome deve ser preenchido e não deve ter menos que 4 caracteres</div>";
-    } else {
-        $data ->last_name = sanitizeString($data ->last_name);
     }
 
     if(!empty($data ->email)){
@@ -68,6 +66,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $data ->email = null;
     }
 
+    $data ->user_name = sanitizeString($data ->user_name);
     if(empty($data ->user_name)||mb_strlen($data ->user_name)<4){
         $error = true;
         $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
@@ -76,7 +75,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             . "</button><strong>Whoops!&nbsp;</strong>"
             . "Nome de usuário deve ser preenchido e não deve ter menos que 4 caracteres</div>";
     } else {
-        $data ->user_name = sanitizeString($data ->user_name);
         try {
             $stmt = $conn ->prepare("SELECT COUNT(id) AS count FROM users WHERE user_name =:user_name");
             $stmt ->bindParam(":user_name", $data ->user_name);
@@ -97,6 +95,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     }
 
+    $data ->user_password = sanitizeString($data ->user_password);
     if(empty($data ->user_password)||mb_strlen($data ->user_password)<6){
         $error = true;
         $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
@@ -136,7 +135,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt ->bindParam(":cell_phone", $data ->cell_phone);
             $stmt ->bindParam(":user_name", $data ->user_name);
             $stmt ->bindParam(":user_password", $data ->user_password);
-            $stmt ->bindParam(":access_level", $data ->access_level);
+            $stmt ->bindParam(":access_level", empty($data ->access_level)?2:$data ->access_level);
             $stmt ->execute();
 
             if($stmt ->rowCount()){
