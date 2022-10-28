@@ -4,23 +4,22 @@ if (!isset($_SESSION["check"])) {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible'> "
             . "<button type='button' class='close' data-dismiss='alert'>"
             . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</stron>"
+            . "</button><strong>Whoops!&nbsp;</stron>"
             . "Área restrita, faça 'login' para acessar.</div>";
     header("Location: index.php");
 }
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
+if($_SERVER["REQUEST_METHOD"] == "POST") {
     $data = (object)filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
     $error = false;
     var_dump($data);
-
     if($data ->first_name != $_SESSION["user_edit"] ->first_name){
         if(empty($data ->first_name)||mb_strlen($data ->first_name)<3){
             $error = true;
             $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
                 . "<button type='button' class='close' data-dismiss='alert'>"
                 . "<span aria-hidden='true'>&times;</span>"
-                . "</button><strong>Aviso!&nbsp;</strong>"
+                . "</button><strong>Whoops!&nbsp;</strong>"
                 . "Nome deve ser preenchido e não deve ter menos que 4 caracteres</div>";
         } else {
             try {
@@ -28,6 +27,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt ->bindValue(":first_name", $data ->first_name);
                 $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
                 $stmt ->execute();
+
+                if($stmt ->rowCount()){
+                    $_SESSION ["msg"] = "<div class='alert alert-success alert-dismissible text-center'> "
+                        . "<button type='button' class='close' data-dismiss='alert'>"
+                        . "<span aria-hidden='true'>&times;</span>"
+                        . "</button><strong>Legal!&nbsp;</strong>"
+                        . "Usuário atualizado com sucesso</div>";
+                }
             } catch (PDOException $e){
                 $error = true;
                 setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
@@ -41,7 +48,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
                 . "<button type='button' class='close' data-dismiss='alert'>"
                 . "<span aria-hidden='true'>&times;</span>"
-                . "</button><strong>Aviso!&nbsp;</strong>"
+                . "</button><strong>Whoops!&nbsp;</strong>"
                 . "Sobrenome deve ser preenchido e não deve ter menos que 4 caracteres</div>";
         } else {
             try {
@@ -49,6 +56,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt ->bindValue(":last_name", $data ->last_name);
                 $stmt ->bindValue(":id", $data ->id, PDO::PARAM_INT);
                 $stmt ->execute();
+                if($stmt ->rowCount()){
+                    $_SESSION ["msg"] = "<div class='alert alert-success alert-dismissible text-center'> "
+                        . "<button type='button' class='close' data-dismiss='alert'>"
+                        . "<span aria-hidden='true'>&times;</span>"
+                        . "</button><strong>Legal!&nbsp;</strong>"
+                        . "Usuário atualizado com sucesso</div>";
+                }
             } catch (PDOException $e){
                 setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
             }
@@ -56,7 +70,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     if($data ->email != $_SESSION["user_edit"] ->email){
+        if(!empty($data ->email)){
+            $data ->email = filter_var($data ->email, FILTER_VALIDATE_EMAIL);
+            $stmt = $conn ->prepare("SELECT COUNT(id) AS count FROM users WHERE email =:email");
+            $stmt ->bindParam(":mail", $data ->email);
+            $stmt ->execute();
+            $stmt ->debugDumpParams();
+            $res = $stmt ->fetch(PDO::FETCH_OBJ);
 
+        } else {
+            $error = true;
+            $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
+                . "<button type='button' class='close' data-dismiss='alert'>"
+                . "<span aria-hidden='true'>&times;</span>"
+                . "</button><strong>Whoops!&nbsp;</strong>"
+                . "O campo email não pode ser vazio</div>";
+        }
         try {
             $stmt = $conn ->prepare("UPDATE users SET email =:email WHERE id =:id");
             $stmt ->bindValue(":email", $data ->email);
@@ -68,9 +97,24 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         }
     }
 
+    /*
+
+
+
+
+
     if($data ->cell_phone != $_SESSION["user_edit"] ->cell_phone){
         if(!empty($data ->cell_phone)){
-            $data ->cell_phone = preg_replace("/\D/", "", $data ->cell_phone);
+            if(mb_strlen($data ->cell_phone)==11){
+                $data ->cell_phone = preg_replace("/\D/", "", $data ->cell_phone);
+            } else {
+                $error = true;
+                $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
+                    . "<button type='button' class='close' data-dismiss='alert'>"
+                    . "<span aria-hidden='true'>&times;</span>"
+                    . "</button><strong>Whoops!&nbsp;</strong>"
+                    . "O número de telefone deve contar 11 dígitos</div>";
+            }
             if(empty($data ->cell_phone)){
                 $data ->cell_phone = null;
             }
@@ -97,7 +141,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
     }
-    /*if($data ->user_password != $_SESSION["user"] ->user_password){
+    if($data ->user_password != $_SESSION["user"] ->user_password){
         try {
             $stmt = $conn ->prepare("UPDATE users SET user_password =:user_password WHERE id =:id");
             $stmt ->bindValue(":user_password", $data ->user_password);
@@ -106,7 +150,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         } catch (PDOException $e){
             setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
-    }*/
+    }
 
     if($data ->access_level != $_SESSION["user_edit"] ->access_level){
         try {
@@ -117,27 +161,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         } catch (PDOException $e){
             setLog("FILE ".$e ->getFile().", LINE ".$e ->getLine().", MSG ".$e ->getMessage());
         }
-    }
+    }*/
 
     if($error){
-        $back = pg . "/register/user";
-        header("Location: $back");
+        $back = pg . "/edit/user?id=".$data ->id;
+
     } else {
         unset($_SESSION["user_edit"]);
+        $back = pg . "/list/users";
     }
+    header("Location: $back");
 }
-elseif($_SERVER["REQUEST_METHOD"] == "GET"){
+elseif($_SERVER["REQUEST_METHOD"] == "GET") {
     $id = filter_input(INPUT_GET, "id",FILTER_VALIDATE_INT);
-    var_dump($id);
+
     $stmt = $conn ->prepare("SELECT situation FROM users WHERE id =:id");
     $stmt ->bindParam(":id", $id, PDO::PARAM_INT);
     $stmt ->execute();
     $res = $stmt ->fetch(PDO::FETCH_OBJ);
 
     if($res ->situation == 1){
-        $stmt = $conn ->prepare("UPDATE users SET situation = 0 WHERE id =:id");
+        $stmt = $conn ->prepare("UPDATE users SET situation = 0 WHERE id =:id AND id !=".$_SESSION["credentials"]["id"]);
     } else {
-        $stmt = $conn ->prepare("UPDATE users SET situation = 1 WHERE id =:id");
+        $stmt = $conn ->prepare("UPDATE users SET situation = 1 WHERE id =:id AND id !=".$_SESSION["credentials"]["id"]);
     }
     $stmt ->bindParam(":id", $id, PDO::PARAM_INT);
     $stmt ->execute();
@@ -146,12 +192,18 @@ elseif($_SERVER["REQUEST_METHOD"] == "GET"){
         $_SESSION ["msg"] = "<div class='alert alert-success alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert'>"
             . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</strong>"
+            . "</button><strong>Legal!&nbsp;</strong>"
             . "Usuário alterado com sucesso</div>";
-        $back = pg . "/list/users";
-        unset($_SESSION["user_register"]);
-        header("Location: $back");
+        unset($_SESSION["user_edit"]);
+    } else {
+        $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
+            . "<button type='button' class='close' data-dismiss='alert'>"
+            . "<span aria-hidden='true'>&times;</span>"
+            . "</button><strong>Whoops!&nbsp;</strong>"
+            . "Você não pode desativar seu próprio usuário</div>";
     }
+    $back = pg . "/list/users";
+    header("Location: $back");
 
 } else {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "

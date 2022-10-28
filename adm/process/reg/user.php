@@ -4,7 +4,7 @@ if (!isset($_SESSION["check"])) {
     $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible'> "
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
-        . "</button><strong>Aviso!&nbsp;</strong>"
+        . "</button><strong>Whoops!&nbsp;</strong>"
         . "Área restrita, faça 'login' para acessar.</div>";
     header("Location: index.php");
 }
@@ -18,7 +18,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert'>"
             . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</strong>"
+            . "</button><strong>Whoops!&nbsp;</strong>"
             . "Nome deve ser preenchido e não deve ter menos que 4 caracteres</div>";
     } else {
         $data ->first_name = sanitizeString($data ->first_name);
@@ -29,7 +29,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert'>"
             . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</strong>"
+            . "</button><strong>Whoops!&nbsp;</strong>"
             . "Sobrenome deve ser preenchido e não deve ter menos que 4 caracteres</div>";
     } else {
         $data ->last_name = sanitizeString($data ->last_name);
@@ -43,7 +43,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
                 . "<button type='button' class='close' data-dismiss='alert'>"
                 . "<span aria-hidden='true'>&times;</span>"
-                . "</button><strong>Aviso!&nbsp;</strong>"
+                . "</button><strong>Whoops!&nbsp;</strong>"
                 . "O email enviado não é um email válido</div>";
         } else {
             try {
@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
                         . "<button type='button' class='close' data-dismiss='alert'>"
                         . "<span aria-hidden='true'>&times;</span>"
-                        . "</button><strong>Aviso!&nbsp;</strong>"
+                        . "</button><strong>Whoops!&nbsp;</strong>"
                         . "Email já cadastrado na base de dados.</div>";
                 }
             } catch (PDOException $e){
@@ -73,7 +73,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert'>"
             . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</strong>"
+            . "</button><strong>Whoops!&nbsp;</strong>"
             . "Nome de usuário deve ser preenchido e não deve ter menos que 4 caracteres</div>";
     } else {
         $data ->user_name = sanitizeString($data ->user_name);
@@ -83,13 +83,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt ->execute();
             $stmt ->debugDumpParams();
             $res = $stmt ->fetch(PDO::FETCH_OBJ);
-            var_dump($res);
+
             if($res ->count == 1){
                 $error = true;
                 $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
                     . "<button type='button' class='close' data-dismiss='alert'>"
                     . "<span aria-hidden='true'>&times;</span>"
-                    . "</button><strong>Aviso!&nbsp;</strong>"
+                    . "</button><strong>Whoops!&nbsp;</strong>"
                     . "Nome de usuário já cadastrado na base de dados</div>";
             }
         } catch (PDOException $e){
@@ -102,14 +102,23 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert'>"
             . "<span aria-hidden='true'>&times;</span>"
-            . "</button><strong>Aviso!&nbsp;</strong>"
+            . "</button><strong>Whoops!&nbsp;</strong>"
             . "A senha deve ter no mínio 6 caracteres</div>";
     } else {
         $data ->user_password = password_hash($data ->user_password, PASSWORD_DEFAULT);
     }
 
     if(!empty($data ->cell_phone)){
-        $data ->cell_phone = preg_replace("/\D/", "", $data ->cell_phone);
+        if(mb_strlen($data ->cell_phone)==11){
+            $data ->cell_phone = preg_replace("/\D/", "", $data ->cell_phone);
+        } else {
+            $error = true;
+            $_SESSION ["msg"] = "<div class='alert alert-warning alert-dismissible text-center'> "
+                . "<button type='button' class='close' data-dismiss='alert'>"
+                . "<span aria-hidden='true'>&times;</span>"
+                . "</button><strong>Whoops!&nbsp;</strong>"
+                . "O número de telefone deve contar 11 dígitos</div>";
+        }
     } else {
         $data ->cell_phone = null;
     }
@@ -131,10 +140,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt ->execute();
 
             if($stmt ->rowCount()){
-                $_SESSION ["msg"] = "<div class='alert alert-success alert-dismissible text-center'> "
+                $_SESSION ["msg"] = "<div class='alert alert-success alert-dismissible text-center dismiss'> "
                     . "<button type='button' class='close' data-dismiss='alert'>"
                     . "<span aria-hidden='true'>&times;</span>"
-                    . "</button><strong>Aviso!&nbsp;</strong>"
+                    . "</button><strong>Legal!&nbsp;</strong>"
                     . "Novo usuário cadastrado com sucesso.</div>";
                 $back = pg . "/list/users";
                 header("Location: $back");
@@ -153,8 +162,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
-        . "</button><strong>Aviso!&nbsp;</strong>"
-        . "Whoops! Método de acesso proibido</div>";
+        . "</button><strong>Whoops!&nbsp;</strong>"
+        . "Método de acesso proibido</div>";
     $back = pg . "/register/user";
     header("Location: $back");
 }

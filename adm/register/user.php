@@ -42,7 +42,7 @@ if (!isset($_SESSION["check"])) {
         <div class="form-group">
             <label for="cell_phone" class="col-sm-2 control-label">Telefone</label>
             <div class="col-sm-10">
-                <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="<?=$_SESSION["user_register"] ->cell_phone??null?>" class="form-control cell-phone" placeholder="(xx) xxxxx-xxxx" >
+                <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="<?=$_SESSION["user_register"] ->cell_phone??null?>" class="form-control cell-phone" placeholder="(xx) xxxxx-xxxx" pattern="^\(\d{2}\)\s[9]\d{4}-\d{4}$">
             </div>
         </div>
         <div class="form-group">

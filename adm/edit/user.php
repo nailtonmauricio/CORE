@@ -18,9 +18,6 @@ if (!empty($id)) {
     $res ->execute();
     $row = $res ->fetch(PDO::FETCH_OBJ);
 
-    //$row ->cell_phone = preg_replace("/^(\d{2})(\d{5})(\d{4})$/", "($1) $2-$3", $row ->cell_phone);
-    var_dump($row);
-
     if ($res ->rowCount()) {
         $_SESSION["user_edit"] = $row;
         #var_dump($_SESSION["user"]);
@@ -60,7 +57,7 @@ if (!empty($id)) {
                 <div class="form-group">
                     <label for="cell_phone" class="col-sm-2 control-label">Telefone</label>
                     <div class="col-sm-10">
-                        <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="<?=$row ->cell_phone = preg_replace("/^(\d{2})(\d{5})(\d{4})$/", "($1) $2-$3", $row ->cell_phone)?>" class="form-control cell-phone" placeholder="(xx) xxxxx-xxxx" >
+                        <input type="tel" inputmode="tel" id="cell_phone" name="cell_phone" value="<?=$row ->cell_phone = preg_replace("/^(\d{2})(\d{5})(\d{4})$/", "($1) $2-$3", $row ->cell_phone)?>" class="form-control cell-phone" placeholder="(xx) xxxxx-xxxx" pattern="^\(\d{2}\)\s[9]\d{4}-\d{4}$">
                     </div>
                 </div>
                 <div class="form-group">
