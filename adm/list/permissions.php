@@ -5,7 +5,7 @@ if (!isset($_SESSION["check"])) {
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Aviso!&nbsp;</stron>"
-        . "Área restrita, faça login para acessar.</div>";
+        . "Área restrita, faça 'login' para acessar.</div>";
     header("Location: index.php");
 }
 $button_perm = load("list/permissions", $conn);
@@ -31,7 +31,7 @@ $id = filter_input(INPUT_GET, 'acid', FILTER_VALIDATE_INT);
     if ($button_list) {
         ?>
         <div class="pull-right">
-            <a href="<?php echo pg . '/list/access_levels'; ?>"><button type="button" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-list"></span> Listar</button></a>
+            <a href="<?php echo pg . '/list/access_levels'; ?>" class="btn btn-xs btn-primary"><span class="glyphicon glyphicon-list"></span> Listar</a>
         </div>
         <div class="pull-left">
             <span class="h3 text-uppercase">PERMISSÕES - <?= $permission ->name?></span>
@@ -77,23 +77,15 @@ $id = filter_input(INPUT_GET, 'acid', FILTER_VALIDATE_INT);
                 <td>
                     <?php
                     if ($permission ->access == 1) {
-                        echo "<a href='" . pg . "/process/edit/permission?id=" . $permission ->id . "'>
-                                                            <button type='button' class='btn btn-xs btn-success'><span class='fa fa-unlock' data-toggle='tooltip' data-placement='top' title='Bloquear o acesso à página'></span></button>
-                                                          </a>";
+                        echo "<a href='" . pg . "/process/edit/permission?id=" . $permission ->id . "' class='btn btn-xs btn-success'><span class='fa fa-unlock' data-toggle='tooltip' data-placement='top' title='Bloquear o acesso à página'></span></a>";
                     } else {
-                        echo "<a href='" . pg . "/process/edit/permission?id=" . $permission ->id . "'>
-                                                            <button type='button' class='btn btn-xs btn-danger'><span class='fa fa-lock' data-toggle='tooltip' data-placement='top' title='Liberar o acesso à página'></span></button>
-                                                          </a>";
+                        echo "<a href='" . pg . "/process/edit/permission?id=" . $permission ->id . "' class='btn btn-xs btn-danger'><span class='fa fa-lock' data-toggle='tooltip' data-placement='top' title='Liberar o acesso à página'></span></a>";
                     }
 
                     if ($permission ->menu == 1) {
-                        echo "<a href='" . pg . "/process/edit/menu?id=" . $permission ->id . "'>
-                                                            <button type='button' class='btn btn-xs btn-success'><span class='fa fa-unlock' data-toggle='tooltip' data-placement='top' title='Bloquear para o Menu'></span></button>
-                                                          </a>";
+                        echo "<a href='" . pg . "/process/edit/menu?id=" . $permission ->id . "' class='btn btn-xs btn-success'><span class='fa fa-unlock' data-toggle='tooltip' data-placement='top' title='Bloquear para o Menu'></span></a>";
                     } else {
-                        echo "<a href='" . pg . "/process/edit/menu?id=" . $permission ->id . "'>
-                                                            <button type='button' class='btn btn-xs btn-danger'><span class='fa fa-lock' data-toggle='tooltip' data-placement='top' title='Liberar para o Menu'></span></button>
-                                                          </a>";
+                        echo "<a href='" . pg . "/process/edit/menu?id=" . $permission ->id . "' class='btn btn-xs btn-danger'><span class='fa fa-lock' data-toggle='tooltip' data-placement='top' title='Liberar para o Menu'></span></a>";
                     }
 
                     echo "<span class='badge' data-toggle='tooltip' data-placement='top' title='Ordem da Linha'>".$permission ->id."</span>";
@@ -102,9 +94,8 @@ $id = filter_input(INPUT_GET, 'acid', FILTER_VALIDATE_INT);
                                           <span class='glyphicon glyphicon-arrow-up' ></span>
                                           </button> ";
                     } else {
-                        echo "<a href = '" . pg . "/process/edit/menu?ordem=" . $permission ->id . "'><button type='button' class='btn btn-default btn-xs' data-toggle='tooltip' data-placement='top' title='Alterar Ordem'>
-                                          <span class='glyphicon glyphicon-arrow-up' ></span>
-                                          </button></a> ";
+                        echo "<a href = '" . pg . "/process/edit/menu?ordem=" . $permission ->id . "' class='btn btn-default btn-xs'  data-toggle='tooltip' data-placement='top' title='Alterar Ordem'>
+                                          <span class='glyphicon glyphicon-arrow-up' ></span></a> ";
                     }
                     $lin_executadas ++;
                     ?>
@@ -116,8 +107,8 @@ $id = filter_input(INPUT_GET, 'acid', FILTER_VALIDATE_INT);
         </tbody>
     </table>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
-    <script type="text/javascript">
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+    <script>
         $(document).ready( function () {
             $('#permissions').DataTable({
                 "language": {

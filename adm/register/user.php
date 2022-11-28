@@ -67,10 +67,10 @@ if (!isset($_SESSION["check"])) {
                     $stmt = $conn->prepare("SELECT id , UPPER(name) AS name FROM access_level WHERE position >=:position AND situation = 1");
                     $stmt ->bindValue(":position", $_SESSION["credentials"]["position"], PDO::PARAM_INT);
                     $stmt->execute();
-                    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    $res = $stmt->fetchAll(PDO::FETCH_OBJ);
                     foreach($res as $accessLevel):
                         ?>
-                        <option value="<?=$accessLevel["id"]?>"><?=$accessLevel["name"]?></option>
+                        <option value="<?=$accessLevel ->id?>"><?=$accessLevel ->name?></option>
                     <?php
                     endforeach;
                     ?>

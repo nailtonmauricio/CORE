@@ -5,15 +5,16 @@ if (!isset($_SESSION["check"])) {
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Aviso!&nbsp;</stron>"
-        . "Área restrita, faça login para acessar.</div>";
+        . "Área restrita, faça 'login' para acessar.</div>";
     header("Location: index.php");
 }
-$button_edit = load("edit/page", $conn);
-$button_view = load("viewer/page", $conn);
+
+$button_edit = load("edit/page", \source\Database\Connect::getInstance());
+$button_view = load("viewer/page", \source\Database\Connect::getInstance());
 ?>
 <div class="well content">
     <?php
-    $button_cad = load("register/page", $conn);
+    $button_cad = load("register/page", \source\Database\Connect::getInstance());
     if ($button_cad) {
         ?>
         <div class="pull-right">
@@ -42,11 +43,11 @@ $button_view = load("viewer/page", $conn);
         <tbody>
         <?php
 
-        $row = paginator("id, path, name, description", "pages", $conn);
+        $row = paginator("id, path, name, description", "pages", \source\Database\Connect::getInstance());
         foreach($row as $page):
             ?>
             <tr>
-                <td><?= $page ->path?></td>
+                <td class="text-uppercase"><?= $page ->path?></td>
                 <td class="text-uppercase"><?= !is_null($page ->name)?$page ->name: "NULL"?></td>
                 <td><?= !is_null($page ->description)?$page ->description: "NULL"?></td>
                 <td>

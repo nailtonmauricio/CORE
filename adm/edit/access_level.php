@@ -5,7 +5,7 @@ if (!isset($_SESSION["check"])) {
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Aviso!&nbsp;</stron>"
-        . "Área restrita, faça login para acessar.</div>";
+        . "Área restrita, faça 'login' para acessar.</div>";
     header("Location: index.php");
 }
 $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
@@ -25,11 +25,7 @@ if (!empty($id)) {
         ?>
         <div class="well content">
             <div class="pull-right">
-                <a href="<?php echo pg . '/list/access_levels'; ?>">
-                    <button type="button" class="btn btn-xs btn-primary">
-                        <span class='glyphicon glyphicon-list'></span> Listar
-                    </button>
-                </a>
+                <a href="<?php echo pg . '/list/access_levels'; ?>" class="btn btn-xs btn-primary"><span class='glyphicon glyphicon-list'></span> Listar</a>
             </div>
             <div class="page-header">
 
@@ -40,8 +36,8 @@ if (!empty($id)) {
                 unset($_SESSION["msg"]);
             }
             ?>
-            <form name="editNvAcesso" method="post" action="<?php echo pg; ?>/process/edit/access_level" class="form-horizontal" enctype="multipart/form-data">
-                <input type="hidden" name="id" id="id" value="<?= $row_nv["id"]; ?>"/>
+            <form name="access_level" method="post" action="<?php echo pg; ?>/process/edit/access_level" class="form-horizontal">
+                <input type="hidden" name="id" id="id" value="<?= $row_nv["id"]; ?>">
                 <div class="form-group">
                     <label for="nome" class="col-sm-2 control-label">Nome</label>
                     <div class="col-sm-10">
@@ -51,7 +47,45 @@ if (!empty($id)) {
                         } elseif (isset($row_nv["name"])) {
                             echo $row_nv["name"];
                         }
-                        ?>"/>
+                        ?>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="profile" class="col-sm-2 control-label">Perfil</label>
+                    <div class="col-sm-10">
+                        <select name="profile" id="profile" class="form-control">
+                            <option>...</option>
+                            <?php
+                            $stmt = $conn ->prepare("SELECT id, UPPER(name) AS name, position FROM access_level WHERE id >=:id AND situation = 1");
+                            $stmt ->bindParam(":id", $_SESSION["credentials"]["position"], PDO::PARAM_INT);
+                            $stmt ->execute();
+                            $res = $stmt ->fetchAll(PDO::FETCH_OBJ);
+                            foreach($res as $profile):
+                                ?>
+                                <option value="<?=$profile ->id?>"><?=$profile ->name?></option>
+                            <?php
+                            endforeach;
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="position" class="col-sm-2 control-label">Posição</label>
+                    <div class="col-sm-10">
+                        <select name="position" id="position" class="form-control">
+                            <option>...</option>
+                            <?php
+                            $stmt = $conn ->prepare("SELECT position , UPPER(name) AS name FROM access_level WHERE id >=:id AND situation = 1");
+                            $stmt ->bindValue(":id", $_SESSION["credentials"]["position"], PDO::PARAM_INT);
+                            $stmt->execute();
+                            $res = $stmt ->fetchAll(PDO::FETCH_OBJ);
+                            foreach($res as $position):
+                                ?>
+                                <option value="<?=$position ->position?>"><?=$position->name?></option>
+                            <?php
+                            endforeach;
+                            ?>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -62,7 +96,7 @@ if (!empty($id)) {
                     </div>
                 </div>
             </form>
-            <script type="text/javascript">
+            <script>
                 /*Função que impede o envio do formulário pela tecla enter acidental*/
                 $(document).ready(function () {
                     $('input').keypress(function (e) {

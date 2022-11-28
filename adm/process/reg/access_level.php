@@ -5,7 +5,7 @@ if (!isset($_SESSION["check"])) {
         . "<button type='button' class='close' data-dismiss='alert'>"
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Whoops!&nbsp;</stron>"
-        . "Área restrita, faça login para acessar.</div>";
+        . "Área restrita, faça 'login 'para acessar.</div>";
     header("Location: index.php");
 }
 
@@ -76,21 +76,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 . "<span aria-hidden='true'>&times;</span>"
                 . "</button><strong>Aviso!&nbsp;</stron>"
                 . "Permissões para o nível de acesso registradas com sucesso!</div>";
-            $url_return= pg . "/list/access_levels";
-            header("Location: $url_return");
+            $back= pg . "/list/access_levels";
+            header("Location: $back");
         }
     } else {
-        var_dump(
-            $data
-        );
-
         $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
             . "<button type='button' class='close' data-dismiss='alert'>"
             . "<span aria-hidden='true'>&times;</span>"
             . "</button><strong>Whoops!&nbsp;</stron>"
             . "É necessário informar o perfil a ser clonado</div>";
-        $url_return= pg . "/register/access_level";
-        header("Location: $url_return");
+        $back= pg . "/register/access_level";
+        header("Location: $back");
     }
 } else {
     $_SESSION ["msg"] = "<div class='alert alert-danger alert-dismissible text-center'> "
@@ -98,6 +94,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         . "<span aria-hidden='true'>&times;</span>"
         . "</button><strong>Whoops!&nbsp;</stron>"
         . "Erro ao carregar a página!</div>";
-    $url_return= pg . "/list/access_levels";
-    header("Location: $url_return");
+    $back= pg . "/list/access_levels";
+    header("Location: $back");
 }

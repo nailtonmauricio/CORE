@@ -62,7 +62,7 @@ function convertDbDateTime($a): string
  */
 function paginator(string $params, string $entity, PDO $conn):array
 {
-    $stmt = $conn ->query("SELECT {$params} FROM {$entity}");
+    $stmt = $conn ->query("SELECT $params FROM $entity");
     $stmt ->execute();
     return $stmt ->fetchAll(PDO::FETCH_OBJ);
 }

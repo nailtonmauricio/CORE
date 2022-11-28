@@ -1,5 +1,7 @@
 <?php
 
+require __DIR__."/../source/Database/Connect.php";
+use source\Database\Connect;
 $url_host = filter_input(INPUT_SERVER, "HTTP_HOST");
 define("pg", "http://$url_host/CORE/adm");
 
@@ -21,11 +23,13 @@ $user = $result[3];
 $pwd = $result[4];
 
 //CREATE CONNECTION
-try {
+/*try {
     $conn = new PDO("mysql:host=$host; dbname=$db_name; charset=$charset", $user, $pwd);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     setLog($e ->getFile());
     setLog($e ->getLine());
     setLog($e ->getMessage());
-}
+}*/
+
+$conn = Connect::getInstance();

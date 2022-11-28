@@ -10,22 +10,22 @@ if (!isset($_SESSION["check"])) {
 $id = filter_input(INPUT_GET, "id", FILTER_SANITIZE_NUMBER_INT);
 
 if (!empty($id)) {
-    $sql = "SELECT p.id, p.name, p.path, p.description, p.created, p.modified FROM pages AS p WHERE id =:id";
-    $res = $conn ->prepare($sql);
-    $res ->bindValue(":id", $id, PDO::PARAM_INT);
-    $res ->execute();
-    $row = $res ->fetch(PDO::FETCH_ASSOC);
+    $stmt = \source\Database\Connect::getInstance()->prepare("SELECT p.id, p.name, p.path, p.description, p.created, p.modified FROM pages AS p WHERE id =:id");
+    $stmt ->bindParam(":id", $id, PDO::PARAM_INT);
+    $stmt ->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
     var_dump(
         $row
     );
-    if ($res ->rowCount()) {
+    if ($stmt ->rowCount()) {
         //$row = mysqli_fetch_assoc($result);
         ?>
         <div class="well content">
             <div class="pull-right">
                 <?php
-                $button_edit = load('edit/page', $conn);
-                $button_list = load('list/pages', $conn);
+
+                $button_edit = load('edit/page', \source\Database\Connect::getInstance());
+                $button_list = load('list/pages', \source\Database\Connect::getInstance());
 
                 if ($button_list) {
                     echo "<a href= '" . pg . "/list/pages'><button type='button' class='btn btn-xs btn-primary'><span class='glyphicon glyphicon-list'></span> Listar</button></a> ";

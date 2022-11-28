@@ -1,0 +1,28 @@
+{
+  "name": "nailtonmauricio/core",
+  "description": "Camada base de implementação para projetos",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Nailton Maurício de Araújo",
+      "email": "dev@nmatec.com.br",
+      "role": "developer",
+      "homepage": "https://www.nmatec.com.br"
+    }
+  ],
+  "config": {
+   "vendor-dir": "vendor"
+  },
+  "autoload": {
+    "psr-4": {
+      "Source\\": "source/"
+    }
+  },
+  "files": [
+    "source/config/config.php"
+  ],
+  "require": {
+    "ext-pdo": "*"
+  }
+}

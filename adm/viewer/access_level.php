@@ -24,9 +24,9 @@ if (!empty($id)) {
 
     $row = $res ->fetch(PDO::FETCH_ASSOC);
 
-    var_dump(
+    /*var_dump(
         $row
-    );
+    );*/
     if ($res ->rowCount()) {
 
         ?>
@@ -37,18 +37,18 @@ if (!empty($id)) {
                 $button_list = load('list/access_levels', $conn);
                 $button_delete = load('process/del/access_level', $conn);
                 if ($button_list) {
-                    echo "<a href= '" . pg . "/list/access_levels'><button type='button' class='btn btn-xs btn-primary'><span class='glyphicon glyphicon-list'></span> Listar</button></a> ";
+                    echo "<a href= '" . pg . "/list/access_levels' class='btn btn-xs btn-primary'><span class='glyphicon glyphicon-list'></span> Listar</a> ";
                 }
                 if ($button_edit) {
-                    echo "<a href= '" . pg . "/edit/access_level?id=" . $row["id"] . "'><button type='button' class='btn btn-xs btn-warning'><span class='glyphicon glyphicon-edit'></span> Editar</button></a> ";
+                    echo "<a href= '" . pg . "/edit/access_level?id=" . $row["id"] . "' class='btn btn-xs btn-warning'><span class='glyphicon glyphicon-edit'></span> Editar</a> ";
                 }
                 if ($button_delete) {
-                    echo "<a href= '" . pg . "/process/del/access_level?id=" . $row["id"] . "'onclick=\"return confirm('Apagar nível de acesso?');\"><button type='button' class='btn btn-xs btn-danger'><span class='glyphicon glyphicon-trash'></span> Apagar</button></a> ";
+                    echo "<a href= '" . pg . "/process/del/access_level?id=" . $row["id"] . "'onclick=\"return confirm('Apagar nível de acesso?');\" class='btn btn-xs btn-danger'><span class='glyphicon glyphicon-trash'></span> Apagar</a> ";
                 }
                 ?>
             </div>
             <div class="page-header"></div>
-            <div class="dl-horizontal">
+            <dl class="dl-horizontal">
                 <dt>Id</dt>
                 <dd><?php echo $row["id"]; ?></dd>
                 <dt>Nome</dt>
@@ -65,7 +65,7 @@ if (!empty($id)) {
                         echo $row["modified"];
                     }
                     ?></dd>
-            </div>
+            </dl>
         </div>
         <?php
     } else {
